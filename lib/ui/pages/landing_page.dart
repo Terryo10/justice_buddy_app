@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../routes/app_router.dart';
 import '../../blocs/category_bloc/category_bloc.dart';
 import '../../blocs/law_info_item_bloc/law_info_item_bloc.dart';
 import '../../models/category_model.dart' as cat;
@@ -69,17 +68,6 @@ class _LandingPageState extends State<LandingPage>
     if (_selectedTab == index) return;
     await _fadeController.reverse();
     setState(() => _selectedTab = index);
-
-    // Navigate to different routes based on tab
-    if (index == 1 && context.router.current.name != LaborRoute.name) {
-      context.router.replace(const LaborRoute());
-    } else if (index == 2 && context.router.current.name != TrafficRoute.name) {
-      context.router.replace(const TrafficRoute());
-    } else if (index == 3 &&
-        context.router.current.name != AskLegalRoute.name) {
-      context.router.replace(const AskLegalRoute());
-    }
-
     _fadeController.forward();
   }
 
@@ -553,6 +541,21 @@ class _LandingPageState extends State<LandingPage>
   }
 
   Widget _buildContentSection(bool isWide) {
+    switch (_selectedTab) {
+      case 0: // Justice Buddy (Home)
+        return _buildHomeContent(isWide);
+      case 1: // Labor
+        return _buildLaborContent(isWide);
+      case 2: // Traffic
+        return _buildTrafficContent(isWide);
+      case 3: // Ask Legal
+        return _buildAskLegalContent(isWide);
+      default:
+        return _buildHomeContent(isWide);
+    }
+  }
+
+  Widget _buildHomeContent(bool isWide) {
     return BlocBuilder<LawInfoItemBloc, LawInfoItemState>(
       builder: (context, state) {
         if (state is LawInfoItemLoading) {
@@ -610,6 +613,268 @@ class _LandingPageState extends State<LandingPage>
         }
 
         return const SliverToBoxAdapter(child: SizedBox.shrink());
+      },
+    );
+  }
+
+  Widget _buildLaborContent(bool isWide) {
+    return SliverPadding(
+      padding: EdgeInsets.all(isWide ? 60 : 24),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Labor Law Information',
+              style: TextStyle(
+                fontSize: isWide ? 32 : 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Access comprehensive information about labor laws, workers\' rights, and employment regulations in South Africa.',
+              style: TextStyle(
+                fontSize: isWide ? 18 : 16,
+                color: const Color(0xFFB0B3B8),
+              ),
+            ),
+            const SizedBox(height: 32),
+            _buildFeatureGrid(isWide, [
+              {
+                'icon': Icons.work,
+                'title': 'Employment Rights',
+                'description':
+                    'Learn about your basic employment rights and protections',
+              },
+              {
+                'icon': Icons.payment,
+                'title': 'Wage & Benefits',
+                'description':
+                    'Understand minimum wage, overtime, and benefit requirements',
+              },
+              {
+                'icon': Icons.security,
+                'title': 'Workplace Safety',
+                'description':
+                    'Know your rights regarding workplace safety and health',
+              },
+              {
+                'icon': Icons.gavel,
+                'title': 'Dispute Resolution',
+                'description':
+                    'How to handle workplace disputes and grievances',
+              },
+            ]),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrafficContent(bool isWide) {
+    return SliverPadding(
+      padding: EdgeInsets.all(isWide ? 60 : 24),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Traffic Law Information',
+              style: TextStyle(
+                fontSize: isWide ? 32 : 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Stay informed about traffic laws, driving regulations, and what to do in case of traffic violations.',
+              style: TextStyle(
+                fontSize: isWide ? 18 : 16,
+                color: const Color(0xFFB0B3B8),
+              ),
+            ),
+            const SizedBox(height: 32),
+            _buildFeatureGrid(isWide, [
+              {
+                'icon': Icons.credit_card,
+                'title': 'Licensing',
+                'description':
+                    'Driver\'s license requirements and renewal procedures',
+              },
+              {
+                'icon': Icons.speed,
+                'title': 'Speed Limits',
+                'description': 'Speed limits and traffic regulations',
+              },
+              {
+                'icon': Icons.local_police,
+                'title': 'Traffic Violations',
+                'description': 'Common traffic violations and penalties',
+              },
+              {
+                'icon': Icons.car_crash,
+                'title': 'Accidents',
+                'description': 'What to do in case of a traffic accident',
+              },
+            ]),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAskLegalContent(bool isWide) {
+    return SliverPadding(
+      padding: EdgeInsets.all(isWide ? 60 : 24),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Ask Legal Questions',
+              style: TextStyle(
+                fontSize: isWide ? 32 : 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Get answers to your legal questions from our AI-powered legal assistant.',
+              style: TextStyle(
+                fontSize: isWide ? 18 : 16,
+                color: const Color(0xFFB0B3B8),
+              ),
+            ),
+            const SizedBox(height: 32),
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A1F2E),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF2A2F3E), width: 1),
+              ),
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.chat_bubble_outline,
+                    color: Color(0xFFFFC107),
+                    size: 48,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Legal AI Assistant',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Ask any legal question and get instant, reliable answers based on South African law.',
+                    style: TextStyle(color: Color(0xFFB0B3B8), fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // TODO: Implement chat functionality
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Chat feature coming soon!'),
+                          backgroundColor: Color(0xFFFFC107),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.chat_bubble),
+                    label: const Text('Start Chat'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFC107),
+                      foregroundColor: const Color(0xFF0A0E1A),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureGrid(bool isWide, List<Map<String, dynamic>> features) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: isWide ? 2 : 1,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        childAspectRatio: isWide ? 2.5 : 2.0,
+      ),
+      itemCount: features.length,
+      itemBuilder: (context, index) {
+        final feature = features[index];
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1A1F2E),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFF2A2F3E), width: 1),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFC107).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  feature['icon'] as IconData,
+                  color: const Color(0xFFFFC107),
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      feature['title'] as String,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      feature['description'] as String,
+                      style: const TextStyle(
+                        color: Color(0xFFB0B3B8),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
