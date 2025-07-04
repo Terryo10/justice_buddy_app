@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:justice_buddy/app_blocs.dart';
 import 'package:justice_buddy/app_repositories.dart';
-import 'package:justice_buddy/blocs/theme/theme_bloc.dart';
+import 'package:justice_buddy/blocs/theme_bloc/theme_bloc.dart';
 import 'package:justice_buddy/constants/app_theme.dart';
 import 'package:justice_buddy/routes/app_router.dart';
 

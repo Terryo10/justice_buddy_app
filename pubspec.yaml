@@ -41,6 +41,9 @@ dependencies:
 
   # Routing
   auto_route: ^7.8.4
+  
+  # HTTP client
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
