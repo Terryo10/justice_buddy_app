@@ -129,27 +129,7 @@ class _LandingPageState extends State<LandingPage>
       toolbarHeight: 80,
       title: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFFC107), Color(0xFFFFB300)],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFFFFC107).withOpacity(0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.account_balance,
-              color: Color(0xFF0A0E1A),
-              size: 32,
-            ),
-          ),
+          Image.asset('assets/logo_1.png', height: 48, width: 48),
           const SizedBox(width: 20),
           const Text(
             'Justice Buddy SA',
@@ -255,122 +235,80 @@ class _LandingPageState extends State<LandingPage>
   Widget _buildHeroSection(bool isWide) {
     return Container(
       padding: EdgeInsets.all(isWide ? 60 : 24),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (!isWide) ...[
-            // Golden Arc with Hand
-            Container(
-              height: 160,
-              width: double.infinity,
+          // Left side - Text content
+          Expanded(
+            flex: isWide ? 1 : 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Image.asset('assets/logo_1.png', height: 64, width: 64),
+                    const SizedBox(width: 20),
+                    const Expanded(
+                      child: Text(
+                        'Justice Buddy SA',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          height: 1.2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Your mobile legal partner. Know your rights. Access legal help. Stay protected.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xFFB0B3B8),
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          if (isWide) ...[
+            const SizedBox(width: 60),
+            // Right side - Image
+            Expanded(
+              flex: 1,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Golden Arc
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFFFC107),
-                          Color(0xFFFFB300),
-                          Color(0xFFF57C00),
-                        ],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFFFFC107).withOpacity(0.4),
-                          blurRadius: 20,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Hand holding effect
+                  Image.asset('assets/legal happy.jpeg', fit: BoxFit.contain),
+                  // Overlay gradient circle
                   Positioned(
-                    bottom: 20,
+                    right: 0,
+                    top: 0,
                     child: Container(
-                      width: 80,
-                      height: 50,
+                      width: 300,
+                      height: 300,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFD4A574),
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            const Color(0xFFFFC107).withOpacity(0.7),
+                            const Color(0xFFFFB300).withOpacity(0.7),
+                            const Color(0xFFF57C00).withOpacity(0.7),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 32),
           ],
-
-          // Logo and Title Section
-          Row(
-            mainAxisAlignment:
-                isWide ? MainAxisAlignment.center : MainAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.account_balance,
-                  color: Color(0xFF1976D2),
-                  size: 40,
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment:
-                      isWide
-                          ? CrossAxisAlignment.center
-                          : CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Justice Buddy SA',
-                      style: TextStyle(
-                        fontSize: isWide ? 36 : 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        height: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Your mobile legal partner. Know your rights. Access legal help. Stay protected.',
-                      style: TextStyle(
-                        fontSize: isWide ? 18 : 16,
-                        color: const Color(0xFFB0B3B8),
-                        height: 1.4,
-                      ),
-                      textAlign: isWide ? TextAlign.center : TextAlign.left,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
@@ -1006,6 +944,7 @@ class _LandingPageState extends State<LandingPage>
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         item.name,
@@ -1018,8 +957,8 @@ class _LandingPageState extends State<LandingPage>
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
-                      Expanded(
+                      const SizedBox(height: 4),
+                      Flexible(
                         child: Text(
                           item.description,
                           style: const TextStyle(
@@ -1027,12 +966,12 @@ class _LandingPageState extends State<LandingPage>
                             fontSize: 12,
                             height: 1.3,
                           ),
-                          maxLines: 3,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       if (item.category != null) ...[
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
