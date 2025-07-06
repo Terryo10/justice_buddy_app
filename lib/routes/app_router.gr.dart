@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AskLegalPage(),
       );
     },
+    HomeRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HomePage(),
+      );
+    },
     LaborRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -46,9 +52,26 @@ abstract class _$AppRouter extends RootStackRouter {
 /// [AskLegalPage]
 class AskLegalRoute extends PageRouteInfo<void> {
   const AskLegalRoute({List<PageRouteInfo>? children})
-    : super(AskLegalRoute.name, initialChildren: children);
+      : super(
+          AskLegalRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'AskLegalRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HomePage]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -57,7 +80,10 @@ class AskLegalRoute extends PageRouteInfo<void> {
 /// [LaborPage]
 class LaborRoute extends PageRouteInfo<void> {
   const LaborRoute({List<PageRouteInfo>? children})
-    : super(LaborRoute.name, initialChildren: children);
+      : super(
+          LaborRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'LaborRoute';
 
@@ -68,7 +94,10 @@ class LaborRoute extends PageRouteInfo<void> {
 /// [LandingPage]
 class LandingRoute extends PageRouteInfo<void> {
   const LandingRoute({List<PageRouteInfo>? children})
-    : super(LandingRoute.name, initialChildren: children);
+      : super(
+          LandingRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'LandingRoute';
 
@@ -79,7 +108,10 @@ class LandingRoute extends PageRouteInfo<void> {
 /// [TrafficPage]
 class TrafficRoute extends PageRouteInfo<void> {
   const TrafficRoute({List<PageRouteInfo>? children})
-    : super(TrafficRoute.name, initialChildren: children);
+      : super(
+          TrafficRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'TrafficRoute';
 
