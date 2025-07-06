@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:justice_buddy/models/law_info_item_model.dart';
-import 'package:justice_buddy/models/category_model.dart' as cat;
+import 'package:justice_buddy/models/category_model.dart';
 
 import '../../repositories/law_info_repository/law_info_repository.dart';
 
@@ -56,7 +56,7 @@ class LawInfoItemBloc extends Bloc<LawInfoItemEvent, LawInfoItemState> {
       emit(
         LawInfoItemLoaded(
           lawInfoItems: lawInfoItems,
-          selectedCategory: event.category as CategoryModel?,
+          selectedCategory: event.category,
           searchQuery: null,
         ),
       );

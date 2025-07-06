@@ -46,10 +46,7 @@ abstract class _$AppRouter extends RootStackRouter {
 /// [AskLegalPage]
 class AskLegalRoute extends PageRouteInfo<void> {
   const AskLegalRoute({List<PageRouteInfo>? children})
-      : super(
-          AskLegalRoute.name,
-          initialChildren: children,
-        );
+    : super(AskLegalRoute.name, initialChildren: children);
 
   static const String name = 'AskLegalRoute';
 
@@ -60,10 +57,7 @@ class AskLegalRoute extends PageRouteInfo<void> {
 /// [LaborPage]
 class LaborRoute extends PageRouteInfo<void> {
   const LaborRoute({List<PageRouteInfo>? children})
-      : super(
-          LaborRoute.name,
-          initialChildren: children,
-        );
+    : super(LaborRoute.name, initialChildren: children);
 
   static const String name = 'LaborRoute';
 
@@ -74,10 +68,7 @@ class LaborRoute extends PageRouteInfo<void> {
 /// [LandingPage]
 class LandingRoute extends PageRouteInfo<void> {
   const LandingRoute({List<PageRouteInfo>? children})
-      : super(
-          LandingRoute.name,
-          initialChildren: children,
-        );
+    : super(LandingRoute.name, initialChildren: children);
 
   static const String name = 'LandingRoute';
 
@@ -88,10 +79,7 @@ class LandingRoute extends PageRouteInfo<void> {
 /// [TrafficPage]
 class TrafficRoute extends PageRouteInfo<void> {
   const TrafficRoute({List<PageRouteInfo>? children})
-      : super(
-          TrafficRoute.name,
-          initialChildren: children,
-        );
+    : super(TrafficRoute.name, initialChildren: children);
 
   static const String name = 'TrafficRoute';
 

@@ -18,7 +18,7 @@ class LoadLawInfoItems extends LawInfoItemEvent {
 }
 
 class LoadLawInfoItemsByCategory extends LawInfoItemEvent {
-  final cat.CategoryModel category;
+  final CategoryModel category;
   final int perPage;
   final int page;
 

@@ -15,7 +15,8 @@ class CategoryProvider {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
+        final Map<String, dynamic> responseMap = json.decode(response.body);
+        final List<dynamic> jsonData = responseMap['data'];
         return jsonData.map((json) => CategoryModel.fromJson(json)).toList();
       } else {
         throw Exception('Failed to load categories: ${response.statusCode}');

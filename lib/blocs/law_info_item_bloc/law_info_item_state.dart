@@ -1,4 +1,3 @@
-
 // law_info_item_state.dart
 part of 'law_info_item_bloc.dart';
 

@@ -428,6 +428,36 @@ class _LandingPageState extends State<LandingPage>
           );
         }
 
+        if (state is CategoryError) {
+          return Container(
+            padding: const EdgeInsets.all(24),
+            child: Center(
+              child: Column(
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error loading categories: ${state.message}',
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<CategoryBloc>().add(LoadCategories());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFC107),
+                      foregroundColor: const Color(0xFF0A0E1A),
+                    ),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         return const SizedBox.shrink();
       },
     );
@@ -542,6 +572,19 @@ class _LandingPageState extends State<LandingPage>
                       'Error: ${state.message}',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                       textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<LawInfoItemBloc>().add(
+                          const LoadLawInfoItems(),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFC107),
+                        foregroundColor: const Color(0xFF0A0E1A),
+                      ),
+                      child: const Text('Retry'),
                     ),
                   ],
                 ),
