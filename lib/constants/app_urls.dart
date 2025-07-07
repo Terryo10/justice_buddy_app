@@ -5,6 +5,9 @@ class AppUrls {
   static const String baseUrl = 'http://127.0.0.1:8000';
   static const String apiPath = '/api';
 
+  // Image URL function
+  static String imageUrl(String image) => '$baseUrl/storage/$image';
+
   // Categories endpoints
   static const String categories = '$baseUrl$apiPath/categories';
   static String categoryById(int id) => '$categories/$id';

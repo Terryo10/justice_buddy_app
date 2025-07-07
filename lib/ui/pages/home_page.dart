@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/category_bloc/category_bloc.dart';
 import '../../blocs/law_info_item_bloc/law_info_item_bloc.dart';
+import '../../constants/app_urls.dart';
 import '../../models/category_model.dart' as cat;
 import '../../models/law_info_item_model.dart';
 
@@ -474,7 +475,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             padding: EdgeInsets.all(isWide ? 32 : 12),
             sliver: SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: isWide ? 4 : 2,
+                crossAxisCount: isWide ? 8 : 2,
                 mainAxisSpacing: isWide ? 16 : 10,
                 crossAxisSpacing: isWide ? 16 : 10,
                 childAspectRatio: isWide ? 0.75 : 0.8,
@@ -591,7 +592,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               top: Radius.circular(compact ? 16 : 24),
                             ),
                             child: Image.network(
-                              item.image!,
+                              AppUrls.imageUrl(item.image!),
                               fit: BoxFit.cover,
                               loadingBuilder: (
                                 context,

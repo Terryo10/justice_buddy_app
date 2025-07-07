@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:justice_buddy/repositories/categories_repository/category_provider.dart';
 
 import 'repositories/categories_repository/category_repository.dart';
-import 'repositories/law_info_repository/law_info_provider.dart' show LawInfoItemProvider;
+import 'repositories/law_info_repository/law_info_provider.dart'
+    show LawInfoItemProvider;
 import 'repositories/law_info_repository/law_info_repository.dart';
+import 'repositories/theme_repository/theme_repository.dart';
 
 class AppRepositories extends StatelessWidget {
   final Widget appBlocs;
+  final FlutterSecureStorage storage;
 
-  const AppRepositories({super.key, required this.appBlocs});
+  const AppRepositories({
+    super.key,
+    required this.appBlocs,
+    required this.storage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,12 @@ class AppRepositories extends StatelessWidget {
           create: (context) => CategoryRepository(provider: CategoryProvider()),
         ),
         RepositoryProvider(
-          create: (context) => LawInfoItemRepository(provider: LawInfoItemProvider()),
+          create:
+              (context) =>
+                  LawInfoItemRepository(provider: LawInfoItemProvider()),
+        ),
+        RepositoryProvider(
+          create: (context) => ThemeRepository(storage: storage),
         ),
       ],
       child: appBlocs,

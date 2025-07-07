@@ -24,7 +24,7 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       toolbarHeight: 80,
       title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Row(
           children: [
             Container(
@@ -42,18 +42,17 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.all(4),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.asset('assets/logo_1.png', height: 40, width: 40),
+                child: GestureDetector(
+                  onTap: () => onTabSelected(0),
+                  child: Image.asset(
+                    'assets/logo_1.png',
+                    height: 40,
+                    width: 40,
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 20),
-            Text(
-              'Justice Buddy SA',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
           ],
         ),
       ),
@@ -109,8 +108,8 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
               BlocBuilder<ThemeBloc, ThemeState>(
                 builder: (context, state) {
                   return IconButton(
-                    onPressed: () {
-                      context.read<ThemeBloc>().toggleTheme();
+                    onPressed: () async {
+                      await context.read<ThemeBloc>().toggleTheme();
                     },
                     icon: Icon(
                       state.isDarkMode ? Icons.light_mode : Icons.dark_mode,
