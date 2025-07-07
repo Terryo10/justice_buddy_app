@@ -117,7 +117,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       height: heroHeight,
       margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       decoration: BoxDecoration(
-      
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withOpacity(0.18),
@@ -132,7 +131,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           // Background image
           Positioned.fill(
             child: ClipRRect(
-           
               child: Image.asset('assets/legal happy.jpeg', fit: BoxFit.cover),
             ),
           ),
@@ -140,7 +138,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-               
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -461,7 +458,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (context, state) {
         if (state is LawInfoItemLoading) {
           return SliverToBoxAdapter(
-            child: Container(
+            child: SizedBox(
               height: 200,
               child: Center(
                 child: CircularProgressIndicator(
@@ -474,17 +471,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
         if (state is LawInfoItemLoaded) {
           return SliverPadding(
-            padding: EdgeInsets.all(isWide ? 60 : 24),
+            padding: EdgeInsets.all(isWide ? 32 : 12),
             sliver: SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: isWide ? 3 : 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                childAspectRatio: isWide ? 0.85 : 0.8,
+                crossAxisCount: isWide ? 4 : 2,
+                mainAxisSpacing: isWide ? 16 : 10,
+                crossAxisSpacing: isWide ? 16 : 10,
+                childAspectRatio: isWide ? 0.75 : 0.8,
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
                 final item = state.lawInfoItems[index];
-                return _buildModernCard(item);
+                return _buildModernCard(item, compact: true);
               }, childCount: state.lawInfoItems.length),
             ),
           );
@@ -536,26 +533,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildModernCard(LawInfoItemModel item) {
+  Widget _buildModernCard(LawInfoItemModel item, {bool compact = false}) {
     final theme = Theme.of(context);
 
     return Container(
       decoration: BoxDecoration(
         color: theme.cardTheme.color,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(compact ? 16 : 24),
         border: Border.all(color: theme.dividerColor, width: 1),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withOpacity(0.2),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: theme.shadowColor.withOpacity(0.15),
+            blurRadius: compact ? 10 : 20,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(compact ? 16 : 24),
           onTap: () {
             // Navigate to detail page
             ScaffoldMessenger.of(context).showSnackBar(
@@ -575,23 +572,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(24),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(compact ? 16 : 24),
                     ),
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        theme.colorScheme.primary.withOpacity(0.1),
-                        theme.colorScheme.secondary.withOpacity(0.1),
+                        theme.colorScheme.primary.withOpacity(0.08),
+                        theme.colorScheme.secondary.withOpacity(0.08),
                       ],
                     ),
                   ),
                   child:
                       item.image != null
                           ? ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(24),
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(compact ? 16 : 24),
                             ),
                             child: Image.network(
                               item.image!,
@@ -607,10 +604,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     gradient: LinearGradient(
                                       colors: [
                                         theme.colorScheme.primary.withOpacity(
-                                          0.1,
+                                          0.08,
                                         ),
                                         theme.colorScheme.secondary.withOpacity(
-                                          0.1,
+                                          0.08,
                                         ),
                                       ],
                                     ),
@@ -629,10 +626,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     gradient: LinearGradient(
                                       colors: [
                                         theme.colorScheme.primary.withOpacity(
-                                          0.1,
+                                          0.08,
                                         ),
                                         theme.colorScheme.secondary.withOpacity(
-                                          0.1,
+                                          0.08,
                                         ),
                                       ],
                                     ),
@@ -640,7 +637,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   child: Center(
                                     child: Icon(
                                       Icons.gavel_rounded,
-                                      size: 40,
+                                      size: compact ? 28 : 40,
                                       color: theme.colorScheme.primary,
                                     ),
                                   ),
@@ -651,7 +648,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           : Center(
                             child: Icon(
                               Icons.gavel_rounded,
-                              size: 40,
+                              size: compact ? 28 : 40,
                               color: theme.colorScheme.primary,
                             ),
                           ),
@@ -662,7 +659,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(compact ? 10 : 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -671,20 +668,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         item.name,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: compact ? 13 : 16,
                           color: theme.textTheme.titleMedium?.color,
                           height: 1.2,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Flexible(
                         child: Text(
                           item.description,
                           style: TextStyle(
                             color: theme.textTheme.bodyMedium?.color,
-                            fontSize: 12,
+                            fontSize: compact ? 10 : 12,
                             height: 1.3,
                           ),
                           maxLines: 2,
@@ -692,24 +689,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                       ),
                       if (item.category != null) ...[
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 2),
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: compact ? 6 : 8,
+                            vertical: compact ? 2 : 4,
                           ),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
+                            color: theme.colorScheme.primary.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(
+                              compact ? 6 : 8,
+                            ),
                             border: Border.all(
-                              color: theme.colorScheme.primary.withOpacity(0.3),
+                              color: theme.colorScheme.primary.withOpacity(0.2),
                             ),
                           ),
                           child: Text(
                             item.category!.name,
                             style: TextStyle(
                               color: theme.colorScheme.primary,
-                              fontSize: 10,
+                              fontSize: compact ? 8 : 10,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
