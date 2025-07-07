@@ -12,51 +12,56 @@ class MobileBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF1A1F2E),
-        border: Border(top: BorderSide(color: Color(0xFF2A2F3E), width: 1)),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: selectedTab,
-        onTap: onTabSelected,
-        backgroundColor: Colors.transparent,
-        selectedItemColor: const Color(0xFFFFC107),
-        unselectedItemColor: const Color(0xFF8A8D93),
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.bottomNavigationBarTheme.backgroundColor,
+          border: Border(top: BorderSide(color: theme.dividerColor, width: 1)),
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 11,
+        child: BottomNavigationBar(
+          currentIndex: selectedTab,
+          onTap: onTabSelected,
+          backgroundColor: Colors.transparent,
+          selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor,
+          unselectedItemColor:
+              theme.bottomNavigationBarTheme.unselectedItemColor,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0,
+          selectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 11,
+          ),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded, size: 24),
+              activeIcon: Icon(Icons.home_rounded, size: 28),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.work_outline_rounded, size: 24),
+              activeIcon: Icon(Icons.work_rounded, size: 28),
+              label: 'Labor',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.traffic_rounded, size: 24),
+              activeIcon: Icon(Icons.traffic_rounded, size: 28),
+              label: 'Traffic',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outline_rounded, size: 24),
+              activeIcon: Icon(Icons.chat_bubble_rounded, size: 28),
+              label: 'Ask Legal',
+            ),
+          ],
         ),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded, size: 24),
-            activeIcon: Icon(Icons.home_rounded, size: 28),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.work_outline_rounded, size: 24),
-            activeIcon: Icon(Icons.work_rounded, size: 28),
-            label: 'Labor',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.traffic_rounded, size: 24),
-            activeIcon: Icon(Icons.traffic_rounded, size: 28),
-            label: 'Traffic',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline_rounded, size: 24),
-            activeIcon: Icon(Icons.chat_bubble_rounded, size: 28),
-            label: 'Ask Legal',
-          ),
-        ],
       ),
     );
   }
 }
-

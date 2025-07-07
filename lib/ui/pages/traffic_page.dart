@@ -8,19 +8,16 @@ class TrafficPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 768;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0E1A),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0E1A),
-        foregroundColor: Colors.white,
-        title: const Text(
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        foregroundColor: theme.appBarTheme.foregroundColor,
+        title: Text(
           'Traffic Law Information',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: theme.appBarTheme.titleTextStyle,
         ),
         elevation: 0,
       ),
@@ -34,7 +31,7 @@ class TrafficPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: isWide ? 32 : 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: theme.textTheme.headlineSmall?.color,
               ),
             ),
             const SizedBox(height: 16),
@@ -42,11 +39,11 @@ class TrafficPage extends StatelessWidget {
               'Stay informed about traffic laws, driving regulations, and what to do in case of traffic violations.',
               style: TextStyle(
                 fontSize: isWide ? 18 : 16,
-                color: const Color(0xFFB0B3B8),
+                color: theme.textTheme.bodyLarge?.color,
               ),
             ),
             const SizedBox(height: 32),
-            _buildFeatureGrid(isWide, [
+            _buildFeatureGrid(context, isWide, [
               {
                 'icon': Icons.credit_card,
                 'title': 'Licensing',
@@ -75,7 +72,13 @@ class TrafficPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureGrid(bool isWide, List<Map<String, dynamic>> features) {
+  Widget _buildFeatureGrid(
+    BuildContext context,
+    bool isWide,
+    List<Map<String, dynamic>> features,
+  ) {
+    final theme = Theme.of(context);
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -91,21 +94,28 @@ class TrafficPage extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF1A1F2E),
+            color: theme.cardTheme.color,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF2A2F3E), width: 1),
+            border: Border.all(color: theme.dividerColor, width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: theme.shadowColor.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFC107).withOpacity(0.1),
+                  color: theme.colorScheme.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   feature['icon'] as IconData,
-                  color: const Color(0xFFFFC107),
+                  color: theme.colorScheme.primary,
                   size: 24,
                 ),
               ),
@@ -117,17 +127,17 @@ class TrafficPage extends StatelessWidget {
                   children: [
                     Text(
                       feature['title'] as String,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: theme.textTheme.titleMedium?.color,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       feature['description'] as String,
-                      style: const TextStyle(
-                        color: Color(0xFFB0B3B8),
+                      style: TextStyle(
+                        color: theme.textTheme.bodyMedium?.color,
                         fontSize: 14,
                       ),
                     ),

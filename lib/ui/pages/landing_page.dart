@@ -11,12 +11,14 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 768;
+    final theme = Theme.of(context);
+
     return AutoTabsRouter(
       routes: [HomeRoute(), LaborRoute(), TrafficRoute(), AskLegalRoute()],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
-          backgroundColor: const Color(0xFF0A0E1A),
+          backgroundColor: theme.scaffoldBackgroundColor,
           appBar:
               isWide
                   ? DesktopNavBar(

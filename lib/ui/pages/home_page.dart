@@ -107,98 +107,145 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildHeroSection(bool isWide) {
-    return Container(
-      padding: EdgeInsets.all(isWide ? 60 : 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+    final heroHeight = isWide ? 280.0 : 200.0;
+    // final heroRadius = isWide ? 40.0 : 24.0;
+    final logoSize = isWide ? 80.0 : 64.0;
+    final theme = Theme.of(context);
+
+    final heroContainer = Container(
+      width: double.infinity,
+      height: heroHeight,
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      decoration: BoxDecoration(
+      
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadowColor.withOpacity(0.18),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          // Left side - Text content
-          Expanded(
-            flex: isWide ? 1 : 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          // Background image
+          Positioned.fill(
+            child: ClipRRect(
+           
+              child: Image.asset('assets/legal happy.jpeg', fit: BoxFit.cover),
+            ),
+          ),
+          // Dark overlay for better text readability
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+               
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                ),
+              ),
+            ),
+          ),
+          // Logo and text positioned at bottom
+          Positioned(
+            left: isWide ? 60 : 24,
+            right: isWide ? 60 : 24,
+            bottom: 24,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Image.asset('assets/logo_1.png', height: 64, width: 64),
-                    const SizedBox(width: 20),
-                    const Expanded(
-                      child: Text(
+                // Logo with white background
+                Container(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.onSurface,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.shadowColor.withOpacity(0.12),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      'assets/logo_1.png',
+                      height: logoSize,
+                      width: logoSize,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                // Text content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
                         'Justice Buddy SA',
                         style: TextStyle(
-                          fontSize: 36,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           height: 1.2,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Your mobile legal partner. Know your rights. Access legal help. Stay protected.',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Color(0xFFB0B3B8),
-                    height: 1.4,
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Your mobile legal partner. Know your rights. Access legal help. Stay protected.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white70,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
+        ],
+      ),
+    );
 
-          if (isWide) ...[
-            const SizedBox(width: 60),
-            // Right side - Image
-            Expanded(
-              flex: 1,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset('assets/legal happy.jpeg', fit: BoxFit.contain),
-                  // Overlay gradient circle
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      width: 300,
-                      height: 300,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            const Color(0xFFFFC107).withOpacity(0.7),
-                            const Color(0xFFFFB300).withOpacity(0.7),
-                            const Color(0xFFF57C00).withOpacity(0.7),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+    return Container(
+      color: theme.scaffoldBackgroundColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          heroContainer,
+          // Subtle divider
+          Container(
+            width: double.infinity,
+            height: 1,
+            color: theme.dividerColor,
+          ),
+          const SizedBox(height: 24),
         ],
       ),
     );
   }
 
   Widget _buildSearchSection(bool isWide) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: isWide ? 60 : 24, vertical: 16),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1F2E),
+          color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFF2A2F3E), width: 1),
+          border: Border.all(color: theme.dividerColor, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: theme.shadowColor.withOpacity(0.2),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -207,13 +254,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: TextField(
           controller: _searchController,
           onChanged: _onSearch,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
+          style: TextStyle(
+            color: theme.textTheme.bodyLarge?.color,
+            fontSize: 16,
+          ),
           decoration: InputDecoration(
             hintText: 'Search legal information...',
-            hintStyle: const TextStyle(color: Color(0xFF8A8D93), fontSize: 16),
-            prefixIcon: const Icon(
+            hintStyle: TextStyle(
+              color: theme.textTheme.bodyMedium?.color,
+              fontSize: 16,
+            ),
+            prefixIcon: Icon(
               Icons.search_rounded,
-              color: Color(0xFFFFC107),
+              color: theme.colorScheme.primary,
               size: 24,
             ),
             suffixIcon:
@@ -223,9 +276,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         _searchController.clear();
                         _onSearch('');
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.clear_rounded,
-                        color: Color(0xFF8A8D93),
+                        color: theme.textTheme.bodyMedium?.color,
                       ),
                     )
                     : null,
@@ -238,13 +291,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildCategoriesSection(bool isWide) {
+    final theme = Theme.of(context);
+
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, state) {
         if (state is CategoryLoading) {
           return Container(
             padding: const EdgeInsets.all(24),
-            child: const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFFC107)),
+            child: Center(
+              child: CircularProgressIndicator(
+                color: theme.colorScheme.primary,
+              ),
             ),
           );
         }
@@ -258,12 +315,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Browse Categories',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: theme.textTheme.titleLarge?.color,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -308,11 +365,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: Center(
               child: Column(
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                  Icon(
+                    Icons.error_outline,
+                    color: theme.colorScheme.error,
+                    size: 48,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'Error loading categories: ${state.message}',
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(
+                      color: theme.textTheme.bodyLarge?.color,
+                      fontSize: 16,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -321,8 +385,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       context.read<CategoryBloc>().add(LoadCategories());
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFC107),
-                      foregroundColor: const Color(0xFF0A0E1A),
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
                     ),
                     child: const Text('Retry'),
                   ),
@@ -338,6 +402,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildCategoryChip(String label, bool isSelected, VoidCallback onTap) {
+    final theme = Theme.of(context);
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       child: InkWell(
@@ -348,21 +414,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           decoration: BoxDecoration(
             gradient:
                 isSelected
-                    ? const LinearGradient(
-                      colors: [Color(0xFFFFC107), Color(0xFFFFB300)],
+                    ? LinearGradient(
+                      colors: [
+                        theme.colorScheme.primary,
+                        theme.colorScheme.primary.withOpacity(0.8),
+                      ],
                     )
                     : null,
-            color: isSelected ? null : const Color(0xFF1A1F2E),
+            color: isSelected ? null : theme.cardTheme.color,
             borderRadius: BorderRadius.circular(25),
             border: Border.all(
-              color: isSelected ? Colors.transparent : const Color(0xFF2A2F3E),
+              color: isSelected ? Colors.transparent : theme.dividerColor,
               width: 1,
             ),
             boxShadow:
                 isSelected
                     ? [
                       BoxShadow(
-                        color: const Color(0xFFFFC107).withOpacity(0.3),
+                        color: theme.colorScheme.primary.withOpacity(0.3),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -372,7 +441,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           child: Text(
             label,
             style: TextStyle(
-              color: isSelected ? const Color(0xFF0A0E1A) : Colors.white,
+              color:
+                  isSelected
+                      ? theme.colorScheme.onPrimary
+                      : theme.textTheme.bodyLarge?.color,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               fontSize: 14,
             ),
@@ -383,14 +455,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildHomeContent(bool isWide) {
+    final theme = Theme.of(context);
+
     return BlocBuilder<LawInfoItemBloc, LawInfoItemState>(
       builder: (context, state) {
         if (state is LawInfoItemLoading) {
           return SliverToBoxAdapter(
             child: Container(
               height: 200,
-              child: const Center(
-                child: CircularProgressIndicator(color: Color(0xFFFFC107)),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: theme.colorScheme.primary,
+                ),
               ),
             ),
           );
@@ -421,15 +497,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: Center(
                 child: Column(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.error_outline,
-                      color: Colors.red,
+                      color: theme.colorScheme.error,
                       size: 48,
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'Error: ${state.message}',
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                        color: theme.textTheme.bodyLarge?.color,
+                        fontSize: 16,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -440,8 +519,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFC107),
-                        foregroundColor: const Color(0xFF0A0E1A),
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.onPrimary,
                       ),
                       child: const Text('Retry'),
                     ),
@@ -458,14 +537,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildModernCard(LawInfoItemModel item) {
+    final theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1F2E),
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFF2A2F3E), width: 1),
+        border: Border.all(color: theme.dividerColor, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: theme.shadowColor.withOpacity(0.2),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -480,7 +561,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Opening ${item.name}'),
-                backgroundColor: const Color(0xFFFFC107),
+                backgroundColor: theme.colorScheme.primary,
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -501,8 +582,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        const Color(0xFFFFC107).withOpacity(0.1),
-                        const Color(0xFF1976D2).withOpacity(0.1),
+                        theme.colorScheme.primary.withOpacity(0.1),
+                        theme.colorScheme.secondary.withOpacity(0.1),
                       ],
                     ),
                   ),
@@ -525,18 +606,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        const Color(
-                                          0xFFFFC107,
-                                        ).withOpacity(0.1),
-                                        const Color(
-                                          0xFF1976D2,
-                                        ).withOpacity(0.1),
+                                        theme.colorScheme.primary.withOpacity(
+                                          0.1,
+                                        ),
+                                        theme.colorScheme.secondary.withOpacity(
+                                          0.1,
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: CircularProgressIndicator(
-                                      color: Color(0xFFFFC107),
+                                      color: theme.colorScheme.primary,
                                       strokeWidth: 2,
                                     ),
                                   ),
@@ -547,31 +628,31 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        const Color(
-                                          0xFFFFC107,
-                                        ).withOpacity(0.1),
-                                        const Color(
-                                          0xFF1976D2,
-                                        ).withOpacity(0.1),
+                                        theme.colorScheme.primary.withOpacity(
+                                          0.1,
+                                        ),
+                                        theme.colorScheme.secondary.withOpacity(
+                                          0.1,
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Icon(
                                       Icons.gavel_rounded,
                                       size: 40,
-                                      color: Color(0xFFFFC107),
+                                      color: theme.colorScheme.primary,
                                     ),
                                   ),
                                 );
                               },
                             ),
                           )
-                          : const Center(
+                          : Center(
                             child: Icon(
                               Icons.gavel_rounded,
                               size: 40,
-                              color: Color(0xFFFFC107),
+                              color: theme.colorScheme.primary,
                             ),
                           ),
                 ),
@@ -588,10 +669,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     children: [
                       Text(
                         item.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.white,
+                          color: theme.textTheme.titleMedium?.color,
                           height: 1.2,
                         ),
                         maxLines: 2,
@@ -601,8 +682,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       Flexible(
                         child: Text(
                           item.description,
-                          style: const TextStyle(
-                            color: Color(0xFFB0B3B8),
+                          style: TextStyle(
+                            color: theme.textTheme.bodyMedium?.color,
                             fontSize: 12,
                             height: 1.3,
                           ),
@@ -618,16 +699,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFC107).withOpacity(0.1),
+                            color: theme.colorScheme.primary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: const Color(0xFFFFC107).withOpacity(0.3),
+                              color: theme.colorScheme.primary.withOpacity(0.3),
                             ),
                           ),
                           child: Text(
                             item.category!.name,
-                            style: const TextStyle(
-                              color: Color(0xFFFFC107),
+                            style: TextStyle(
+                              color: theme.colorScheme.primary,
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
                             ),

@@ -8,19 +8,16 @@ class AskLegalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 768;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0E1A),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0E1A),
-        foregroundColor: Colors.white,
-        title: const Text(
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        foregroundColor: theme.appBarTheme.foregroundColor,
+        title: Text(
           'Ask Legal Questions',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: theme.appBarTheme.titleTextStyle,
         ),
         elevation: 0,
       ),
@@ -34,7 +31,7 @@ class AskLegalPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: isWide ? 32 : 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: theme.textTheme.headlineSmall?.color,
               ),
             ),
             const SizedBox(height: 16),
@@ -42,37 +39,47 @@ class AskLegalPage extends StatelessWidget {
               'Get answers to your legal questions from our AI-powered legal assistant.',
               style: TextStyle(
                 fontSize: isWide ? 18 : 16,
-                color: const Color(0xFFB0B3B8),
+                color: theme.textTheme.bodyLarge?.color,
               ),
             ),
             const SizedBox(height: 32),
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: const Color(0xFF1A1F2E),
+                color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF2A2F3E), width: 1),
+                border: Border.all(color: theme.dividerColor, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.shadowColor.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.chat_bubble_outline,
-                    color: Color(0xFFFFC107),
+                    color: theme.colorScheme.primary,
                     size: 48,
                   ),
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     'Legal AI Assistant',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: theme.textTheme.titleLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Ask any legal question and get instant, reliable answers based on South African law.',
-                    style: TextStyle(color: Color(0xFFB0B3B8), fontSize: 16),
+                    style: TextStyle(
+                      color: theme.textTheme.bodyLarge?.color,
+                      fontSize: 16,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
@@ -80,17 +87,17 @@ class AskLegalPage extends StatelessWidget {
                     onPressed: () {
                       // TODO: Implement chat functionality
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Chat feature coming soon!'),
-                          backgroundColor: Color(0xFFFFC107),
+                        SnackBar(
+                          content: const Text('Chat feature coming soon!'),
+                          backgroundColor: theme.colorScheme.primary,
                         ),
                       );
                     },
                     icon: const Icon(Icons.chat_bubble),
                     label: const Text('Start Chat'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFC107),
-                      foregroundColor: const Color(0xFF0A0E1A),
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 32,
                         vertical: 16,
