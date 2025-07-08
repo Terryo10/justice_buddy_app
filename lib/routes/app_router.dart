@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import '../ui/pages/ask_legal_page.dart';
 import '../ui/pages/home_page.dart';
-import '../ui/pages/labor_page.dart';
+import '../ui/pages/legal_drafter.dart';
 import '../ui/pages/landing_page.dart';
-import '../ui/pages/traffic_page.dart';
+import '../ui/pages/get_documents.dart';
 
 part 'app_router.gr.dart';
 
