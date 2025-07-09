@@ -7,6 +7,8 @@ import 'repositories/categories_repository/category_repository.dart';
 import 'repositories/law_info_repository/law_info_provider.dart'
     show LawInfoItemProvider;
 import 'repositories/law_info_repository/law_info_repository.dart';
+import 'repositories/lawyer_repository/lawyer_provider.dart';
+import 'repositories/lawyer_repository/lawyer_repository.dart';
 import 'repositories/theme_repository/theme_repository.dart';
 
 class AppRepositories extends StatelessWidget {
@@ -30,6 +32,9 @@ class AppRepositories extends StatelessWidget {
           create:
               (context) =>
                   LawInfoItemRepository(provider: LawInfoItemProvider()),
+        ),
+        RepositoryProvider(
+          create: (context) => LawyerRepository(provider: LawyerProvider()),
         ),
         RepositoryProvider(
           create: (context) => ThemeRepository(storage: storage),

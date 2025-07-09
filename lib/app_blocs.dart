@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/theme_bloc/theme_bloc.dart';
 import 'blocs/category_bloc/category_bloc.dart';
 import 'blocs/law_info_item_bloc/law_info_item_bloc.dart';
+import 'blocs/lawyer_bloc/lawyer_bloc.dart';
 import 'repositories/categories_repository/category_repository.dart';
 import 'repositories/law_info_repository/law_info_repository.dart';
+import 'repositories/lawyer_repository/lawyer_repository.dart';
 import 'repositories/theme_repository/theme_repository.dart';
 
 class AppBlocs extends StatelessWidget {
@@ -30,6 +32,12 @@ class AppBlocs extends StatelessWidget {
           create:
               (context) => LawInfoItemBloc(
                 lawInfoItemRepository: context.read<LawInfoItemRepository>(),
+              ),
+        ),
+        BlocProvider<LawyerBloc>(
+          create:
+              (context) => LawyerBloc(
+                lawyerRepository: context.read<LawyerRepository>(),
               ),
         ),
       ],

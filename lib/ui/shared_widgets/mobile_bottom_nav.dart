@@ -45,19 +45,19 @@ class MobileBottomNav extends StatelessWidget {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.work_outline_rounded, size: 24),
-              activeIcon: Icon(Icons.work_rounded, size: 28),
-              label: 'Labor',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.traffic_rounded, size: 24),
-              activeIcon: Icon(Icons.traffic_rounded, size: 28),
-              label: 'Traffic',
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.chat_bubble_outline_rounded, size: 24),
               activeIcon: Icon(Icons.chat_bubble_rounded, size: 28),
               label: 'Ask Legal',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.edit_document, size: 24),
+              activeIcon: Icon(Icons.edit_document, size: 28),
+              label: 'Drafter',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.description_outlined, size: 24),
+              activeIcon: Icon(Icons.description, size: 28),
+              label: 'Documents',
             ),
           ],
         ),

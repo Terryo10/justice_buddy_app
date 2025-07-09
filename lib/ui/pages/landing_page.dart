@@ -15,7 +15,7 @@ class LandingPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return AutoTabsRouter(
-      routes: [HomeRoute(), LaborRoute(), TrafficRoute(), AskLegalRoute()],
+      routes: [HomeRoute(), AskLegalRoute(), LegalDrafterRoute(), GetDocumentsRoute()],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
@@ -25,7 +25,7 @@ class LandingPage extends StatelessWidget {
               isWide
                   ? DesktopNavBar(
                     selectedTab: tabsRouter.activeIndex,
-                    tabs: const ['Home', 'Labor', 'Traffic', 'Ask Legal Ai'],
+                    tabs: const ['Home', 'Ask Legal AI', 'Legal Drafter', 'Get Documents'],
                     onTabSelected: (index) => tabsRouter.setActiveIndex(index),
                   )
                   : AppBar(

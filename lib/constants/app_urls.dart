@@ -20,6 +20,15 @@ class AppUrls {
   static const String users = '$baseUrl$apiPath/users';
   static String userById(int id) => '$users/$id';
 
+  // Lawyers endpoints
+  static const String lawyers = '$baseUrl$apiPath/lawyers';
+  static String lawyerBySlug(String slug) => '$lawyers/$slug';
+  static const String featuredLawyers = '$lawyers/featured';
+  static const String lawyerSpecializations = '$lawyers/specializations';
+  static const String lawyerLocations = '$lawyers/locations';
+  static String lawyersBySpecialization(String specialization) => '$lawyers/specialization/$specialization';
+  static const String nearbyLawyers = '$lawyers/near';
+
   // Auth endpoints
   static const String login = '$baseUrl$apiPath/auth/login';
   static const String register = '$baseUrl$apiPath/auth/register';

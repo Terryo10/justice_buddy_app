@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class LegalDrafter extends StatelessWidget {
-  const LegalDrafter({super.key});
+class GetDocumentsPage extends StatelessWidget {
+  const GetDocumentsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class LegalDrafter extends StatelessWidget {
         backgroundColor: theme.appBarTheme.backgroundColor,
         foregroundColor: theme.appBarTheme.foregroundColor,
         title: Text(
-          'Labor Law Information',
+          'Traffic Law Information',
           style: theme.appBarTheme.titleTextStyle,
         ),
         elevation: 0,
@@ -27,7 +27,7 @@ class LegalDrafter extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Labor Law Information',
+              'Traffic Law Information',
               style: TextStyle(
                 fontSize: isWide ? 32 : 24,
                 fontWeight: FontWeight.bold,
@@ -36,7 +36,7 @@ class LegalDrafter extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Access comprehensive information about labor laws, workers\' rights, and employment regulations in South Africa.',
+              'Stay informed about traffic laws, driving regulations, and what to do in case of traffic violations.',
               style: TextStyle(
                 fontSize: isWide ? 18 : 16,
                 color: theme.textTheme.bodyLarge?.color,
@@ -45,28 +45,25 @@ class LegalDrafter extends StatelessWidget {
             const SizedBox(height: 32),
             _buildFeatureGrid(context, isWide, [
               {
-                'icon': Icons.work,
-                'title': 'Employment Rights',
+                'icon': Icons.credit_card,
+                'title': 'Licensing',
                 'description':
-                    'Learn about your basic employment rights and protections',
+                    'Driver\'s license requirements and renewal procedures',
               },
               {
-                'icon': Icons.payment,
-                'title': 'Wage & Benefits',
-                'description':
-                    'Understand minimum wage, overtime, and benefit requirements',
+                'icon': Icons.speed,
+                'title': 'Speed Limits',
+                'description': 'Speed limits and traffic regulations',
               },
               {
-                'icon': Icons.security,
-                'title': 'Workplace Safety',
-                'description':
-                    'Know your rights regarding workplace safety and health',
+                'icon': Icons.local_police,
+                'title': 'Traffic Violations',
+                'description': 'Common traffic violations and penalties',
               },
               {
-                'icon': Icons.gavel,
-                'title': 'Dispute Resolution',
-                'description':
-                    'How to handle workplace disputes and grievances',
+                'icon': Icons.car_crash,
+                'title': 'Accidents',
+                'description': 'What to do in case of a traffic accident',
               },
             ]),
           ],

@@ -59,7 +59,7 @@ class SideBar extends StatelessWidget {
                           onTap:
                               () => _navigateToPage(
                                 context,
-                                const TrafficRoute(),
+                                const GetDocumentsRoute(),
                               ),
                         ),
                         _buildNavItem(
@@ -67,8 +67,20 @@ class SideBar extends StatelessWidget {
                           icon: Icons.edit_document,
                           title: 'Legal Drafter',
                           onTap:
-                              () =>
-                                  _navigateToPage(context, const LaborRoute()),
+                              () => _navigateToPage(
+                                context,
+                                const LegalDrafterRoute(),
+                              ),
+                        ),
+                        _buildNavItem(
+                          context: context,
+                          icon: Icons.people_outline,
+                          title: 'Find Lawyers',
+                          onTap:
+                              () => _navigateToPage(
+                                context,
+                                const LawyersRoute(),
+                              ),
                         ),
                       ],
                     ),
@@ -315,8 +327,19 @@ class SideBar extends StatelessWidget {
   }
 
   void _navigateToPage(BuildContext context, PageRouteInfo route) {
-    context.router.navigate(route);
-    Navigator.of(context).pop(); // Close the drawer
+    // Close the drawer first
+    Navigator.of(context).pop();
+
+    // For routes that are part of the main tabs, use navigate
+    if (route is HomeRoute ||
+        route is AskLegalRoute ||
+        route is LegalDrafterRoute ||
+        route is GetDocumentsRoute) {
+      context.router.navigate(route);
+    } else {
+      // For other routes (like lawyers), push them as separate pages
+      context.router.push(route);
+    }
   }
 
   void _showComingSoonSnackBar(BuildContext context, String feature) {
