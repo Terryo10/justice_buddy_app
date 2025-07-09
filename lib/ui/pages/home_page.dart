@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withOpacity(0.18),
+            color: theme.shadowColor.withAlpha((0.18 * 255).round()),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -142,7 +142,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withAlpha((0.7 * 255).round()),
+                  ],
                 ),
               ),
             ),
@@ -162,7 +165,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: theme.shadowColor.withOpacity(0.12),
+                        color: theme.shadowColor.withAlpha(
+                          (0.12 * 255).round(),
+                        ),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -243,7 +248,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           border: Border.all(color: theme.dividerColor, width: 1),
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor.withOpacity(0.2),
+              color: theme.shadowColor.withAlpha((0.2 * 255).round()),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -415,7 +420,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ? LinearGradient(
                       colors: [
                         theme.colorScheme.primary,
-                        theme.colorScheme.primary.withOpacity(0.8),
+                        theme.colorScheme.primary.withAlpha(
+                          (0.8 * 255).round(),
+                        ),
                       ],
                     )
                     : null,
@@ -429,7 +436,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 isSelected
                     ? [
                       BoxShadow(
-                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        color: theme.colorScheme.primary.withAlpha(
+                          (0.3 * 255).round(),
+                        ),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -544,7 +553,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         border: Border.all(color: theme.dividerColor, width: 1),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withOpacity(0.15),
+            color: theme.shadowColor.withAlpha((0.15 * 255).round()),
             blurRadius: compact ? 10 : 20,
             offset: const Offset(0, 4),
           ),
@@ -580,8 +589,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        theme.colorScheme.primary.withOpacity(0.08),
-                        theme.colorScheme.secondary.withOpacity(0.08),
+                        theme.colorScheme.primary.withAlpha(
+                          (0.08 * 255).round(),
+                        ),
+                        theme.colorScheme.secondary.withAlpha(
+                          (0.08 * 255).round(),
+                        ),
                       ],
                     ),
                   ),
@@ -604,11 +617,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        theme.colorScheme.primary.withOpacity(
-                                          0.08,
+                                        theme.colorScheme.primary.withAlpha(
+                                          (0.08 * 255).round(),
                                         ),
-                                        theme.colorScheme.secondary.withOpacity(
-                                          0.08,
+                                        theme.colorScheme.secondary.withAlpha(
+                                          (0.08 * 255).round(),
                                         ),
                                       ],
                                     ),
@@ -626,11 +639,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        theme.colorScheme.primary.withOpacity(
-                                          0.08,
+                                        theme.colorScheme.primary.withAlpha(
+                                          (0.08 * 255).round(),
                                         ),
-                                        theme.colorScheme.secondary.withOpacity(
-                                          0.08,
+                                        theme.colorScheme.secondary.withAlpha(
+                                          (0.08 * 255).round(),
                                         ),
                                       ],
                                     ),
@@ -697,12 +710,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             vertical: compact ? 2 : 4,
                           ),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withOpacity(0.08),
+                            color: theme.colorScheme.primary.withAlpha(
+                              (0.08 * 255).round(),
+                            ),
                             borderRadius: BorderRadius.circular(
                               compact ? 6 : 8,
                             ),
                             border: Border.all(
-                              color: theme.colorScheme.primary.withOpacity(0.2),
+                              color: theme.colorScheme.primary.withAlpha(
+                                (0.2 * 255).round(),
+                              ),
                             ),
                           ),
                           child: Text(

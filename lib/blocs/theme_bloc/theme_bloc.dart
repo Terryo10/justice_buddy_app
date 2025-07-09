@@ -19,7 +19,6 @@ class ThemeBloc extends Cubit<ThemeState> {
       emit(ThemeState(isDarkMode: isDarkMode));
     } catch (e) {
       // Keep default state if there's an error
-      print('Error loading theme mode: $e');
     }
   }
 

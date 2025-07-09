@@ -30,7 +30,7 @@ class AppTheme {
       cardTheme: CardTheme(
         color: Colors.white,
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(0.15),
+        shadowColor: Colors.black.withAlpha((0.15 * 255).round()),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         margin: const EdgeInsets.all(0),
       ),
@@ -63,7 +63,7 @@ class AppTheme {
           backgroundColor: primaryBlue,
           foregroundColor: Colors.white,
           elevation: 4,
-          shadowColor: primaryBlue.withOpacity(0.3),
+          shadowColor: primaryBlue.withAlpha((0.3 * 255).round()),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -100,7 +100,7 @@ class AppTheme {
       cardTheme: CardTheme(
         color: cardBackgroundLight,
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(0.3),
+        shadowColor: Colors.black.withAlpha((0.3 * 255).round()),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         margin: const EdgeInsets.all(0),
       ),
@@ -127,15 +127,15 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryBlue,
         brightness: Brightness.dark,
-        background: darkBackground,
-        surface: cardBackground,
+        surface: darkBackground,
+        surfaceContainer: cardBackground,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryBlue,
           foregroundColor: Colors.white,
           elevation: 8,
-          shadowColor: primaryBlue.withOpacity(0.4),
+          shadowColor: primaryBlue.withAlpha((0.4 * 255).round()),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

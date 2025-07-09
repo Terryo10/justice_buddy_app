@@ -84,7 +84,6 @@ class SideBar extends StatelessWidget {
                           icon: Icons.settings_outlined,
                           title: 'Settings',
                           onTap: () {
-                            // TODO: Navigate to settings page when created
                             _showComingSoonSnackBar(context, 'Settings');
                           },
                         ),
@@ -137,7 +136,7 @@ class SideBar extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withAlpha((0.2 * 255).round()),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.balance, color: Colors.white, size: 24),
@@ -165,7 +164,7 @@ class SideBar extends StatelessWidget {
           Text(
             'Your Legal Companion',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withAlpha((0.9 * 255).round()),
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
@@ -194,7 +193,11 @@ class SideBar extends StatelessWidget {
               style: theme.textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.5,
-                color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+                color:
+                    theme.textTheme.bodySmall?.color?.withAlpha(
+                      (0.7 * 255).round(),
+                    ) ??
+                    theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
               ),
             ),
           ),
@@ -226,7 +229,7 @@ class SideBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               color:
                   isSelected
-                      ? AppTheme.primaryBlue.withOpacity(0.1)
+                      ? AppTheme.primaryBlue.withAlpha((0.1 * 255).round())
                       : Colors.transparent,
             ),
             child: Row(
@@ -273,7 +276,7 @@ class SideBar extends StatelessWidget {
             color: theme.cardColor,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: theme.dividerColor.withOpacity(0.3),
+              color: theme.dividerColor.withAlpha((0.3 * 255).round()),
               width: 1,
             ),
           ),
@@ -299,7 +302,9 @@ class SideBar extends StatelessWidget {
                   context.read<ThemeBloc>().toggleTheme();
                 },
                 activeColor: AppTheme.primaryBlue,
-                inactiveTrackColor: theme.dividerColor.withOpacity(0.3),
+                inactiveTrackColor: theme.dividerColor.withAlpha(
+                  (0.3 * 255).round(),
+                ),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ],

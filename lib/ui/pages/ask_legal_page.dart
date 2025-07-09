@@ -51,7 +51,7 @@ class AskLegalPage extends StatelessWidget {
                 border: Border.all(color: theme.dividerColor, width: 1),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.shadowColor.withOpacity(0.1),
+                    color: theme.shadowColor.withAlpha((0.1 * 255).round()),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -85,7 +85,6 @@ class AskLegalPage extends StatelessWidget {
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // TODO: Implement chat functionality
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: const Text('Chat feature coming soon!'),

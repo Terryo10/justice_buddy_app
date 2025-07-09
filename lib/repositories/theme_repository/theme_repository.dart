@@ -24,7 +24,7 @@ class ThemeRepository {
       );
     } catch (e) {
       // Handle error silently or log it
-      print('Error saving theme mode: $e');
+
     }
   }
 }

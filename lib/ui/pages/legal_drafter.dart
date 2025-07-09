@@ -102,7 +102,7 @@ class LegalDrafter extends StatelessWidget {
             border: Border.all(color: theme.dividerColor, width: 1),
             boxShadow: [
               BoxShadow(
-                color: theme.shadowColor.withOpacity(0.1),
+                color: theme.shadowColor.withAlpha((0.1 * 255).round()),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -113,7 +113,9 @@ class LegalDrafter extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.1),
+                  color: theme.colorScheme.primary.withAlpha(
+                    (0.1 * 255).round(),
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(

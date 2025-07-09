@@ -17,7 +17,6 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return AppBar(
       backgroundColor: theme.colorScheme.surface,
@@ -33,7 +32,7 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.shadowColor.withOpacity(0.1),
+                    color: theme.shadowColor.withAlpha((0.1 * 255).round()),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -73,7 +72,9 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
                               ? LinearGradient(
                                 colors: [
                                   theme.colorScheme.primary,
-                                  theme.colorScheme.primary.withOpacity(0.8),
+                                  theme.colorScheme.primary.withAlpha(
+                                    (0.8 * 255).round(),
+                                  ),
                                 ],
                               )
                               : null,
@@ -84,7 +85,9 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
                         foregroundColor:
                             selectedTab == i
                                 ? theme.colorScheme.onPrimary
-                                : theme.colorScheme.onSurface.withOpacity(0.7),
+                                : theme.colorScheme.onSurface.withAlpha(
+                                  (0.7 * 255).round(),
+                                ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 12,
@@ -121,8 +124,8 @@ class DesktopNavBar extends StatelessWidget implements PreferredSizeWidget {
                             ? 'Switch to Light Mode'
                             : 'Switch to Dark Mode',
                     style: IconButton.styleFrom(
-                      backgroundColor: theme.colorScheme.surfaceVariant
-                          .withOpacity(0.3),
+                      backgroundColor: theme.colorScheme.surfaceContainerHighest
+                          .withAlpha((0.3 * 255).round()),
                       padding: const EdgeInsets.all(12),
                     ),
                   );
