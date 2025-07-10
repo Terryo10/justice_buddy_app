@@ -24,12 +24,14 @@ class LawyerProvider {
         'per_page': perPage.toString(),
       };
 
-      if (specialization != null)
+      if (specialization != null) {
         queryParams['specialization'] = specialization;
+      }
       if (city != null) queryParams['city'] = city;
       if (province != null) queryParams['province'] = province;
-      if (acceptingClients != null)
+      if (acceptingClients != null) {
         queryParams['accepting_clients'] = acceptingClients.toString();
+      }
       if (language != null) queryParams['language'] = language;
       if (search != null) queryParams['search'] = search;
       if (sortBy != null) queryParams['sort_by'] = sortBy;
