@@ -9,6 +9,8 @@ import 'repositories/law_info_repository/law_info_provider.dart'
 import 'repositories/law_info_repository/law_info_repository.dart';
 import 'repositories/lawyer_repository/lawyer_provider.dart';
 import 'repositories/lawyer_repository/lawyer_repository.dart';
+import 'repositories/letter_repository/letter_provider.dart';
+import 'repositories/letter_repository/letter_repository.dart';
 import 'repositories/theme_repository/theme_repository.dart';
 
 class AppRepositories extends StatelessWidget {
@@ -35,6 +37,9 @@ class AppRepositories extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (context) => LawyerRepository(provider: LawyerProvider()),
+        ),
+        RepositoryProvider(
+          create: (context) => LetterRepository(provider: LetterProvider()),
         ),
         RepositoryProvider(
           create: (context) => ThemeRepository(storage: storage),

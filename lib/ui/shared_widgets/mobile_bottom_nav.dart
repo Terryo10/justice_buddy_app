@@ -50,9 +50,9 @@ class MobileBottomNav extends StatelessWidget {
               label: 'Ask Legal',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.edit_document, size: 24),
-              activeIcon: Icon(Icons.edit_document, size: 28),
-              label: 'Drafter',
+              icon: Icon(Icons.description_rounded, size: 24),
+              activeIcon: Icon(Icons.description_rounded, size: 28),
+              label: 'Letters',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.description_outlined, size: 24),

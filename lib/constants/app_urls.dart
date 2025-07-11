@@ -26,8 +26,24 @@ class AppUrls {
   static const String featuredLawyers = '$lawyers/featured';
   static const String lawyerSpecializations = '$lawyers/specializations';
   static const String lawyerLocations = '$lawyers/locations';
-  static String lawyersBySpecialization(String specialization) => '$lawyers/specialization/$specialization';
+  static String lawyersBySpecialization(String specialization) =>
+      '$lawyers/specialization/$specialization';
   static const String nearbyLawyers = '$lawyers/near';
+
+  // Letter Generation endpoints
+  static const String letterTemplates =
+      '$baseUrl$apiPath/letter-generation/templates';
+  static String letterTemplateById(int id) => '$letterTemplates/$id';
+  static const String generateLetter =
+      '$baseUrl$apiPath/letter-generation/generate';
+  static const String letterCategories =
+      '$baseUrl$apiPath/letter-generation/categories';
+  static const String letterRequests = '$baseUrl$apiPath/letter-requests';
+  static String letterRequestStatus(String requestId) =>
+      '$letterRequests/status/$requestId';
+  static String downloadLetter(String requestId) =>
+      '$letterRequests/download/$requestId';
+  static const String letterHistory = '$letterRequests/history';
 
   // Auth endpoints
   static const String login = '$baseUrl$apiPath/auth/login';

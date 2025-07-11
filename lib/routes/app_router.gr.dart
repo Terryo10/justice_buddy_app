@@ -10,7 +10,7 @@
 part of 'app_router.dart';
 
 abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element, unused_element_parameter
+  // ignore: unused_element
   _$AppRouter({super.navigatorKey});
 
   @override
@@ -58,10 +58,36 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const LawyersPage(),
       );
     },
-    LegalDrafterRoute.name: (routeData) {
+    LetterFormRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<LetterFormRouteArgs>(
+          orElse: () =>
+              LetterFormRouteArgs(templateId: pathParams.getInt('templateId')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const LegalDrafterPage(),
+        child: LetterFormPage(
+          key: args.key,
+          templateId: args.templateId,
+        ),
+      );
+    },
+    LetterResultRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<LetterResultRouteArgs>(
+          orElse: () => LetterResultRouteArgs(
+              requestId: pathParams.getString('requestId')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LetterResultPage(
+          key: args.key,
+          requestId: args.requestId,
+        ),
+      );
+    },
+    LetterTemplatesRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const LetterTemplatesPage(),
       );
     },
   };
@@ -177,15 +203,93 @@ class LawyersRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LegalDrafterPage]
-class LegalDrafterRoute extends PageRouteInfo<void> {
-  const LegalDrafterRoute({List<PageRouteInfo>? children})
-      : super(
-          LegalDrafterRoute.name,
+/// [LetterFormPage]
+class LetterFormRoute extends PageRouteInfo<LetterFormRouteArgs> {
+  LetterFormRoute({
+    Key? key,
+    required int templateId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LetterFormRoute.name,
+          args: LetterFormRouteArgs(
+            key: key,
+            templateId: templateId,
+          ),
+          rawPathParams: {'templateId': templateId},
           initialChildren: children,
         );
 
-  static const String name = 'LegalDrafterRoute';
+  static const String name = 'LetterFormRoute';
+
+  static const PageInfo<LetterFormRouteArgs> page =
+      PageInfo<LetterFormRouteArgs>(name);
+}
+
+class LetterFormRouteArgs {
+  const LetterFormRouteArgs({
+    this.key,
+    required this.templateId,
+  });
+
+  final Key? key;
+
+  final int templateId;
+
+  @override
+  String toString() {
+    return 'LetterFormRouteArgs{key: $key, templateId: $templateId}';
+  }
+}
+
+/// generated route for
+/// [LetterResultPage]
+class LetterResultRoute extends PageRouteInfo<LetterResultRouteArgs> {
+  LetterResultRoute({
+    Key? key,
+    required String requestId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LetterResultRoute.name,
+          args: LetterResultRouteArgs(
+            key: key,
+            requestId: requestId,
+          ),
+          rawPathParams: {'requestId': requestId},
+          initialChildren: children,
+        );
+
+  static const String name = 'LetterResultRoute';
+
+  static const PageInfo<LetterResultRouteArgs> page =
+      PageInfo<LetterResultRouteArgs>(name);
+}
+
+class LetterResultRouteArgs {
+  const LetterResultRouteArgs({
+    this.key,
+    required this.requestId,
+  });
+
+  final Key? key;
+
+  final String requestId;
+
+  @override
+  String toString() {
+    return 'LetterResultRouteArgs{key: $key, requestId: $requestId}';
+  }
+}
+
+/// generated route for
+/// [LetterTemplatesPage]
+class LetterTemplatesRoute extends PageRouteInfo<void> {
+  const LetterTemplatesRoute({List<PageRouteInfo>? children})
+      : super(
+          LetterTemplatesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LetterTemplatesRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

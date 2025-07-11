@@ -64,12 +64,12 @@ class SideBar extends StatelessWidget {
                         ),
                         _buildNavItem(
                           context: context,
-                          icon: Icons.edit_document,
-                          title: 'Legal Drafter',
+                          icon: Icons.description_rounded,
+                          title: 'Letter Generator',
                           onTap:
                               () => _navigateToPage(
                                 context,
-                                const LegalDrafterRoute(),
+                                const LetterTemplatesRoute(),
                               ),
                         ),
                         _buildNavItem(
@@ -333,7 +333,7 @@ class SideBar extends StatelessWidget {
     // For routes that are part of the main tabs, use navigate
     if (route is HomeRoute ||
         route is AskLegalRoute ||
-        route is LegalDrafterRoute ||
+        route is LetterTemplatesRoute ||
         route is GetDocumentsRoute) {
       context.router.navigate(route);
     } else {

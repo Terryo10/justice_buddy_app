@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import '../../blocs/lawyer_bloc/lawyer_bloc.dart';
 import '../../models/lawyer_model.dart';
-
+import '../shared_widgets/desktop_nav_bar.dart';
+import '../../routes/app_router.dart';
 import '../../constants/app_urls.dart';
 
 @RoutePage()
@@ -91,12 +92,34 @@ class _LawyersPageState extends State<LawyersPage> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text('Find a Lawyer', style: theme.appBarTheme.titleTextStyle),
-        backgroundColor: theme.appBarTheme.backgroundColor,
-        foregroundColor: theme.appBarTheme.foregroundColor,
-        elevation: 0,
-      ),
+      appBar: isWide
+          ? DesktopNavBar(
+              selectedTab: -1, // -1 indicates no main tab is selected
+              tabs: const ['Home', 'Ask Legal AI', 'Legal Drafter', 'Get Documents'],
+              onTabSelected: (index) {
+                // Navigate to main app tabs
+                switch (index) {
+                  case 0:
+                    context.router.navigate(const HomeRoute());
+                    break;
+                  case 1:
+                    context.router.navigate(const AskLegalRoute());
+                    break;
+                  case 2:
+                    context.router.navigate(const LetterTemplatesRoute());
+                    break;
+                  case 3:
+                    context.router.navigate(const GetDocumentsRoute());
+                    break;
+                }
+              },
+            )
+          : AppBar(
+              title: Text('Find a Lawyer', style: theme.appBarTheme.titleTextStyle),
+              backgroundColor: theme.appBarTheme.backgroundColor,
+              foregroundColor: theme.appBarTheme.foregroundColor,
+              elevation: 0,
+            ),
       body: Column(
         children: [
           // Search and Filter Section

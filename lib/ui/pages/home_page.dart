@@ -635,24 +635,47 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 );
                               },
                               errorBuilder: (context, error, stackTrace) {
+                                // Fallback for when images fail to load (like on web due to CORS)
                                 return Container(
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
                                         theme.colorScheme.primary.withAlpha(
-                                          (0.08 * 255).round(),
+                                          (0.1 * 255).round(),
                                         ),
                                         theme.colorScheme.secondary.withAlpha(
-                                          (0.08 * 255).round(),
+                                          (0.1 * 255).round(),
                                         ),
                                       ],
                                     ),
                                   ),
                                   child: Center(
-                                    child: Icon(
-                                      Icons.gavel_rounded,
-                                      size: compact ? 28 : 40,
-                                      color: theme.colorScheme.primary,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.account_balance,
+                                          size: compact ? 32 : 48,
+                                          color: theme.colorScheme.primary
+                                              .withAlpha((0.6 * 255).round()),
+                                        ),
+                                        if (!compact) ...[
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Legal',
+                                            style: theme.textTheme.bodySmall
+                                                ?.copyWith(
+                                                  color: theme
+                                                      .colorScheme
+                                                      .primary
+                                                      .withAlpha(
+                                                        (0.6 * 255).round(),
+                                                      ),
+                                                ),
+                                          ),
+                                        ],
+                                      ],
                                     ),
                                   ),
                                 );
