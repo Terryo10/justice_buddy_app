@@ -15,10 +15,10 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    AskLegalRoute.name: (routeData) {
+    ChatRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const AskLegalPage(),
+        child: const ChatPage(),
       );
     },
     GetDocumentsRoute.name: (routeData) {
@@ -94,15 +94,15 @@ abstract class _$AppRouter extends RootStackRouter {
 }
 
 /// generated route for
-/// [AskLegalPage]
-class AskLegalRoute extends PageRouteInfo<void> {
-  const AskLegalRoute({List<PageRouteInfo>? children})
+/// [ChatPage]
+class ChatRoute extends PageRouteInfo<void> {
+  const ChatRoute({List<PageRouteInfo>? children})
       : super(
-          AskLegalRoute.name,
+          ChatRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'AskLegalRoute';
+  static const String name = 'ChatRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

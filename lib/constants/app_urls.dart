@@ -44,6 +44,11 @@ class AppUrls {
   static String downloadLetter(String requestId) =>
       '$letterRequests/download/$requestId';
   static const String letterHistory = '$letterRequests/history';
+  static const String letterHistoryByDevice = '$letterRequests/history/device';
+
+  // Chat endpoints
+  static const String chatRules = '$baseUrl$apiPath/chat/rules';
+  static const String chatMessage = '$baseUrl$apiPath/chat/message';
 
   // Auth endpoints
   static const String login = '$baseUrl$apiPath/auth/login';

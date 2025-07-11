@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../ui/pages/ask_legal_page.dart';
 import '../ui/pages/home_page.dart';
 import '../ui/pages/landing_page.dart';
 import '../ui/pages/get_documents_page.dart';
@@ -9,6 +8,7 @@ import '../ui/lawyer_directory/lawyer_detail_page.dart';
 import '../ui/letter_generator/letter_templates_page.dart';
 import '../ui/letter_generator/letter_form_page.dart';
 import '../ui/letter_generator/letter_result_page.dart';
+import '../ui/chat/chat_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -23,7 +23,7 @@ class AppRouter extends _$AppRouter {
       initial: true,
       children: [
         AutoRoute(page: HomeRoute.page, path: 'home'),
-        AutoRoute(page: AskLegalRoute.page, path: 'ask-legal'),
+        AutoRoute(page: ChatRoute.page, path: 'chat'),
         AutoRoute(page: LetterTemplatesRoute.page, path: 'letter-generator'),
         AutoRoute(page: GetDocumentsRoute.page, path: 'get-documents'),
       ],
@@ -31,7 +31,7 @@ class AppRouter extends _$AppRouter {
     // Lawyer pages - separate from tab structure
     AutoRoute(page: LawyersRoute.page, path: '/lawyers'),
     AutoRoute(page: LawyerDetailRoute.page, path: '/lawyers/:slug'),
-    
+
     // Letter generation pages
     AutoRoute(page: LetterTemplatesRoute.page, path: '/letter-templates'),
     AutoRoute(page: LetterFormRoute.page, path: '/letter-form/:templateId'),

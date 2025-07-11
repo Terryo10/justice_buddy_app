@@ -10,64 +10,52 @@ class GetDocumentsPage extends StatelessWidget {
     final isWide = MediaQuery.of(context).size.width > 768;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: theme.appBarTheme.backgroundColor,
-        foregroundColor: theme.appBarTheme.foregroundColor,
-        title: Text(
-          'Traffic Law Information',
-          style: theme.appBarTheme.titleTextStyle,
-        ),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(isWide ? 60 : 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Traffic Law Information',
-              style: TextStyle(
-                fontSize: isWide ? 32 : 24,
-                fontWeight: FontWeight.bold,
-                color: theme.textTheme.headlineSmall?.color,
-              ),
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(isWide ? 60 : 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Traffic Law Information',
+            style: TextStyle(
+              fontSize: isWide ? 32 : 24,
+              fontWeight: FontWeight.bold,
+              color: theme.textTheme.headlineSmall?.color,
             ),
-            const SizedBox(height: 16),
-            Text(
-              'Stay informed about traffic laws, driving regulations, and what to do in case of traffic violations.',
-              style: TextStyle(
-                fontSize: isWide ? 18 : 16,
-                color: theme.textTheme.bodyLarge?.color,
-              ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Stay informed about traffic laws, driving regulations, and what to do in case of traffic violations.',
+            style: TextStyle(
+              fontSize: isWide ? 18 : 16,
+              color: theme.textTheme.bodyLarge?.color,
             ),
-            const SizedBox(height: 32),
-            _buildFeatureGrid(context, isWide, [
-              {
-                'icon': Icons.credit_card,
-                'title': 'Licensing',
-                'description':
-                    'Driver\'s license requirements and renewal procedures',
-              },
-              {
-                'icon': Icons.speed,
-                'title': 'Speed Limits',
-                'description': 'Speed limits and traffic regulations',
-              },
-              {
-                'icon': Icons.local_police,
-                'title': 'Traffic Violations',
-                'description': 'Common traffic violations and penalties',
-              },
-              {
-                'icon': Icons.car_crash,
-                'title': 'Accidents',
-                'description': 'What to do in case of a traffic accident',
-              },
-            ]),
-          ],
-        ),
+          ),
+          const SizedBox(height: 32),
+          _buildFeatureGrid(context, isWide, [
+            {
+              'icon': Icons.credit_card,
+              'title': 'Licensing',
+              'description':
+                  'Driver\'s license requirements and renewal procedures',
+            },
+            {
+              'icon': Icons.speed,
+              'title': 'Speed Limits',
+              'description': 'Speed limits and traffic regulations',
+            },
+            {
+              'icon': Icons.local_police,
+              'title': 'Traffic Violations',
+              'description': 'Common traffic violations and penalties',
+            },
+            {
+              'icon': Icons.car_crash,
+              'title': 'Accidents',
+              'description': 'What to do in case of a traffic accident',
+            },
+          ]),
+        ],
       ),
     );
   }

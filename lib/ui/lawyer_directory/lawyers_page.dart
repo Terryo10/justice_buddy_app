@@ -103,7 +103,7 @@ class _LawyersPageState extends State<LawyersPage> {
                     context.router.navigate(const HomeRoute());
                     break;
                   case 1:
-                    context.router.navigate(const AskLegalRoute());
+                    context.router.navigate(const ChatRoute());
                     break;
                   case 2:
                     context.router.navigate(const LetterTemplatesRoute());

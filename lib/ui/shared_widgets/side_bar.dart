@@ -45,12 +45,9 @@ class SideBar extends StatelessWidget {
                         _buildNavItem(
                           context: context,
                           icon: Icons.chat_bubble_outline_rounded,
-                          title: 'Ask Legal AI',
+                          title: 'Legal Chat',
                           onTap:
-                              () => _navigateToPage(
-                                context,
-                                const AskLegalRoute(),
-                              ),
+                              () => _navigateToPage(context, const ChatRoute()),
                         ),
                         _buildNavItem(
                           context: context,
@@ -332,7 +329,7 @@ class SideBar extends StatelessWidget {
 
     // For routes that are part of the main tabs, use navigate
     if (route is HomeRoute ||
-        route is AskLegalRoute ||
+        route is ChatRoute ||
         route is LetterTemplatesRoute ||
         route is GetDocumentsRoute) {
       context.router.navigate(route);

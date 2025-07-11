@@ -17,7 +17,7 @@ class LandingPage extends StatelessWidget {
     return AutoTabsRouter(
       routes: [
         HomeRoute(),
-        AskLegalRoute(),
+        ChatRoute(),
         LetterTemplatesRoute(),
         GetDocumentsRoute(),
       ],
@@ -32,7 +32,7 @@ class LandingPage extends StatelessWidget {
                     selectedTab: tabsRouter.activeIndex,
                     tabs: const [
                       'Home',
-                      'Ask Legal AI',
+                      'Legal Chat',
                       'Letter Generator',
                       'Get Documents',
                     ],

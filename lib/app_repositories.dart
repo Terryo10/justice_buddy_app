@@ -11,7 +11,10 @@ import 'repositories/lawyer_repository/lawyer_provider.dart';
 import 'repositories/lawyer_repository/lawyer_repository.dart';
 import 'repositories/letter_repository/letter_provider.dart';
 import 'repositories/letter_repository/letter_repository.dart';
+import 'repositories/chat_repository/chat_provider.dart';
+import 'repositories/chat_repository/chat_repository.dart';
 import 'repositories/theme_repository/theme_repository.dart';
+import 'services/device_id_service.dart';
 
 class AppRepositories extends StatelessWidget {
   final Widget appBlocs;
@@ -25,6 +28,9 @@ class AppRepositories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create the DeviceIdService instance once
+    final deviceIdService = DeviceIdService(storage: storage);
+    
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -38,8 +44,20 @@ class AppRepositories extends StatelessWidget {
         RepositoryProvider(
           create: (context) => LawyerRepository(provider: LawyerProvider()),
         ),
+        RepositoryProvider.value(
+          value: deviceIdService,
+        ),
         RepositoryProvider(
-          create: (context) => LetterRepository(provider: LetterProvider()),
+          create: (context) => LetterRepository(
+            provider: LetterProvider(),
+            deviceIdService: deviceIdService,
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => ChatRepository(
+            provider: ChatProvider(),
+            secureStorage: storage,
+          ),
         ),
         RepositoryProvider(
           create: (context) => ThemeRepository(storage: storage),

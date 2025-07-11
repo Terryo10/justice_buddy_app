@@ -99,6 +99,7 @@ class LetterProvider {
     String? clientPhone,
     required Map<String, dynamic> clientMatters,
     bool generateAsync = true,
+    required String deviceId,
   }) async {
     try {
       final body = {
@@ -108,6 +109,7 @@ class LetterProvider {
         'client_phone': clientPhone,
         'client_matters': clientMatters,
         'generate_async': generateAsync,
+        'device_id': deviceId,
       };
 
       final response = await http.post(
@@ -161,19 +163,18 @@ class LetterProvider {
     }
   }
 
-  /// Get the user's letter generation history
+  /// Get the device's letter generation history
   Future<List<LetterRequestModel>> getLetterHistory({
     int page = 1,
     int perPage = 15,
-    String? clientEmail,
+    required String deviceId,
   }) async {
     try {
-      final uri = Uri.parse(AppUrls.letterHistory);
+      final uri = Uri.parse(AppUrls.letterHistoryByDevice);
       final queryParams = <String, String>{
         'page': page.toString(),
         'per_page': perPage.toString(),
-        // Use provided email or default test email for now
-        'client_email': clientEmail ?? 'test@example.com',
+        'device_id': deviceId,
       };
 
       final finalUri = uri.replace(queryParameters: queryParams);

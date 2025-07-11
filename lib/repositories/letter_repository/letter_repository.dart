@@ -1,11 +1,16 @@
 import '../../models/letter_template_model.dart';
 import '../../models/letter_request_model.dart';
+import '../../services/device_id_service.dart';
 import 'letter_provider.dart';
 
 class LetterRepository {
   final LetterProvider provider;
+  final DeviceIdService deviceIdService;
 
-  LetterRepository({required this.provider});
+  LetterRepository({
+    required this.provider,
+    required this.deviceIdService,
+  });
 
   /// Get all available letter templates with optional filters
   Future<List<LetterTemplateModel>> getTemplates({
@@ -52,6 +57,9 @@ class LetterRepository {
         throw Exception('Client name is required');
       }
 
+      // Get the device ID
+      final deviceId = await deviceIdService.getDeviceId();
+
       return await provider.generateLetter(
         templateId: templateId,
         clientName: clientName,
@@ -59,6 +67,7 @@ class LetterRepository {
         clientPhone: clientPhone,
         clientMatters: clientMatters,
         generateAsync: generateAsync,
+        deviceId: deviceId,
       );
     } catch (e) {
       rethrow;
@@ -78,17 +87,17 @@ class LetterRepository {
     }
   }
 
-  /// Get the user's letter generation history
+  /// Get the device's letter generation history
   Future<List<LetterRequestModel>> getLetterHistory({
     int page = 1,
     int perPage = 15,
-    String? clientEmail,
   }) async {
     try {
+      final deviceId = await deviceIdService.getDeviceId();
       return await provider.getLetterHistory(
         page: page,
         perPage: perPage,
-        clientEmail: clientEmail,
+        deviceId: deviceId,
       );
     } catch (e) {
       rethrow;

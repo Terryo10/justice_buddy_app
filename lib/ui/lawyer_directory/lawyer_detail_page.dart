@@ -29,37 +29,37 @@ class _LawyerDetailPageState extends State<LawyerDetailPage> {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 768;
-    
+
     return Scaffold(
       appBar:
           isWide
-          ? DesktopNavBar(
-              selectedTab: -1, // -1 indicates no main tab is selected
+              ? DesktopNavBar(
+                selectedTab: -1, // -1 indicates no main tab is selected
                 tabs: const [
                   'Home',
                   'Ask Legal AI',
                   'Legal Drafter',
                   'Get Documents',
                 ],
-              onTabSelected: (index) {
-                // Navigate to main app tabs
-                switch (index) {
-                  case 0:
-                    context.router.navigate(const HomeRoute());
-                    break;
-                  case 1:
-                    context.router.navigate(const AskLegalRoute());
-                    break;
-                  case 2:
+                onTabSelected: (index) {
+                  // Navigate to main app tabs
+                  switch (index) {
+                    case 0:
+                      context.router.navigate(const HomeRoute());
+                      break;
+                    case 1:
+                      context.router.navigate(const ChatRoute());
+                      break;
+                    case 2:
                       context.router.navigate(const LetterTemplatesRoute());
-                    break;
-                  case 3:
-                    context.router.navigate(const GetDocumentsRoute());
-                    break;
-                }
-              },
-            )
-          : null,
+                      break;
+                    case 3:
+                      context.router.navigate(const GetDocumentsRoute());
+                      break;
+                  }
+                },
+              )
+              : null,
       body: BlocBuilder<LawyerBloc, LawyerState>(
         builder: (context, state) {
           if (state is LawyerLoading) {

@@ -47,7 +47,7 @@ class MobileBottomNav extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.chat_bubble_outline_rounded, size: 24),
               activeIcon: Icon(Icons.chat_bubble_rounded, size: 28),
-              label: 'Ask Legal',
+              label: 'Legal Chat',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.description_rounded, size: 24),
