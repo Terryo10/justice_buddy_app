@@ -39,6 +39,19 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const LandingPage(),
       );
     },
+    LawInfoItemDetailRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<LawInfoItemDetailRouteArgs>(
+          orElse: () =>
+              LawInfoItemDetailRouteArgs(slug: pathParams.getString('slug')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LawInfoItemDetailPage(
+          key: args.key,
+          slug: args.slug,
+        ),
+      );
+    },
     LawyerDetailRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<LawyerDetailRouteArgs>(
@@ -166,6 +179,45 @@ class LandingRoute extends PageRouteInfo<void> {
   static const String name = 'LandingRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LawInfoItemDetailPage]
+class LawInfoItemDetailRoute extends PageRouteInfo<LawInfoItemDetailRouteArgs> {
+  LawInfoItemDetailRoute({
+    Key? key,
+    required String slug,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LawInfoItemDetailRoute.name,
+          args: LawInfoItemDetailRouteArgs(
+            key: key,
+            slug: slug,
+          ),
+          rawPathParams: {'slug': slug},
+          initialChildren: children,
+        );
+
+  static const String name = 'LawInfoItemDetailRoute';
+
+  static const PageInfo<LawInfoItemDetailRouteArgs> page =
+      PageInfo<LawInfoItemDetailRouteArgs>(name);
+}
+
+class LawInfoItemDetailRouteArgs {
+  const LawInfoItemDetailRouteArgs({
+    this.key,
+    required this.slug,
+  });
+
+  final Key? key;
+
+  final String slug;
+
+  @override
+  String toString() {
+    return 'LawInfoItemDetailRouteArgs{key: $key, slug: $slug}';
+  }
 }
 
 /// generated route for

@@ -16,24 +16,40 @@ class LawInfoItemLoaded extends LawInfoItemState {
   final List<LawInfoItemModel> lawInfoItems;
   final CategoryModel? selectedCategory;
   final String? searchQuery;
+  final LawInfoItemModel? selectedLawInfoItem;
 
   const LawInfoItemLoaded({
     required this.lawInfoItems,
     this.selectedCategory,
     this.searchQuery,
+    this.selectedLawInfoItem,
   });
 
   @override
-  List<Object?> get props => [lawInfoItems, selectedCategory, searchQuery];
-}
+  List<Object?> get props => [
+    lawInfoItems,
+    selectedCategory,
+    searchQuery,
+    selectedLawInfoItem,
+  ];
 
-class LawInfoItemDetailLoaded extends LawInfoItemState {
-  final LawInfoItemModel lawInfoItem;
-
-  const LawInfoItemDetailLoaded({required this.lawInfoItem});
-
-  @override
-  List<Object?> get props => [lawInfoItem];
+  LawInfoItemLoaded copyWith({
+    List<LawInfoItemModel>? lawInfoItems,
+    CategoryModel? selectedCategory,
+    String? searchQuery,
+    LawInfoItemModel? selectedLawInfoItem,
+    bool clearSelectedLawInfoItem = false,
+  }) {
+    return LawInfoItemLoaded(
+      lawInfoItems: lawInfoItems ?? this.lawInfoItems,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+      searchQuery: searchQuery ?? this.searchQuery,
+      selectedLawInfoItem:
+          clearSelectedLawInfoItem
+              ? null
+              : selectedLawInfoItem ?? this.selectedLawInfoItem,
+    );
+  }
 }
 
 class LawInfoItemError extends LawInfoItemState {

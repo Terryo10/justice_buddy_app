@@ -18,6 +18,7 @@ class LawInfoItemBloc extends Bloc<LawInfoItemEvent, LawInfoItemState> {
     on<SearchLawInfoItems>(_onSearchLawInfoItems);
     on<LoadLawInfoItemDetails>(_onLoadLawInfoItemDetails);
     on<ClearLawInfoItems>(_onClearLawInfoItems);
+    on<ClearSelectedLawInfoItem>(_onClearSelectedLawInfoItem);
   }
 
   Future<void> _onLoadLawInfoItems(
@@ -30,11 +31,19 @@ class LawInfoItemBloc extends Bloc<LawInfoItemEvent, LawInfoItemState> {
         perPage: event.perPage,
         page: event.page,
       );
+
+      // Preserve selectedLawInfoItem if it exists
+      final selectedLawInfoItem =
+          state is LawInfoItemLoaded
+              ? (state as LawInfoItemLoaded).selectedLawInfoItem
+              : null;
+
       emit(
         LawInfoItemLoaded(
           lawInfoItems: lawInfoItems,
           selectedCategory: null,
           searchQuery: null,
+          selectedLawInfoItem: selectedLawInfoItem,
         ),
       );
     } catch (error) {
@@ -53,11 +62,19 @@ class LawInfoItemBloc extends Bloc<LawInfoItemEvent, LawInfoItemState> {
         perPage: event.perPage,
         page: event.page,
       );
+
+      // Preserve selectedLawInfoItem if it exists
+      final selectedLawInfoItem =
+          state is LawInfoItemLoaded
+              ? (state as LawInfoItemLoaded).selectedLawInfoItem
+              : null;
+
       emit(
         LawInfoItemLoaded(
           lawInfoItems: lawInfoItems,
           selectedCategory: event.category,
           searchQuery: null,
+          selectedLawInfoItem: selectedLawInfoItem,
         ),
       );
     } catch (error) {
@@ -77,11 +94,19 @@ class LawInfoItemBloc extends Bloc<LawInfoItemEvent, LawInfoItemState> {
         perPage: event.perPage,
         page: event.page,
       );
+
+      // Preserve selectedLawInfoItem if it exists
+      final selectedLawInfoItem =
+          state is LawInfoItemLoaded
+              ? (state as LawInfoItemLoaded).selectedLawInfoItem
+              : null;
+
       emit(
         LawInfoItemLoaded(
           lawInfoItems: lawInfoItems,
           selectedCategory: null,
           searchQuery: event.query,
+          selectedLawInfoItem: selectedLawInfoItem,
         ),
       );
     } catch (error) {
@@ -93,12 +118,26 @@ class LawInfoItemBloc extends Bloc<LawInfoItemEvent, LawInfoItemState> {
     LoadLawInfoItemDetails event,
     Emitter<LawInfoItemState> emit,
   ) async {
-    emit(LawInfoItemLoading());
+    // Only show loading if we don't have existing data
+    if (state is! LawInfoItemLoaded) {
+      emit(LawInfoItemLoading());
+    }
+
     try {
       final lawInfoItem = await lawInfoItemRepository.getLawInfoItemBySlug(
         event.slug,
       );
-      emit(LawInfoItemDetailLoaded(lawInfoItem: lawInfoItem));
+
+      // If we have existing loaded state, preserve it and just update the selected item
+      if (state is LawInfoItemLoaded) {
+        final currentState = state as LawInfoItemLoaded;
+        emit(currentState.copyWith(selectedLawInfoItem: lawInfoItem));
+      } else {
+        // If no existing state, create a new one with just the selected item
+        emit(
+          LawInfoItemLoaded(lawInfoItems: [], selectedLawInfoItem: lawInfoItem),
+        );
+      }
     } catch (error) {
       emit(LawInfoItemError(message: error.toString()));
     }
@@ -109,5 +148,15 @@ class LawInfoItemBloc extends Bloc<LawInfoItemEvent, LawInfoItemState> {
     Emitter<LawInfoItemState> emit,
   ) {
     emit(LawInfoItemInitial());
+  }
+
+  void _onClearSelectedLawInfoItem(
+    ClearSelectedLawInfoItem event,
+    Emitter<LawInfoItemState> emit,
+  ) {
+    if (state is LawInfoItemLoaded) {
+      final currentState = state as LawInfoItemLoaded;
+      emit(currentState.copyWith(clearSelectedLawInfoItem: true));
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../ui/pages/home_page.dart';
 import '../ui/pages/landing_page.dart';
 import '../ui/pages/get_documents_page.dart';
+import '../ui/pages/law_info_item_detail_page.dart';
 import '../ui/lawyer_directory/lawyers_page.dart';
 import '../ui/lawyer_directory/lawyer_detail_page.dart';
 import '../ui/letter_generator/letter_templates_page.dart';
@@ -30,6 +31,8 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: GetDocumentsRoute.page, path: 'get-documents'),
       ],
     ),
+    // Law info item detail page
+    AutoRoute(page: LawInfoItemDetailRoute.page, path: '/law-info/:slug'),
     // Lawyer pages - separate from tab structure
     AutoRoute(page: LawyersRoute.page, path: '/lawyers'),
     AutoRoute(page: LawyerDetailRoute.page, path: '/lawyers/:slug'),

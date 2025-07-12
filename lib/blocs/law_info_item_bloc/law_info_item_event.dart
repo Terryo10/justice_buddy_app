@@ -59,3 +59,5 @@ class LoadLawInfoItemDetails extends LawInfoItemEvent {
 }
 
 class ClearLawInfoItems extends LawInfoItemEvent {}
+
+class ClearSelectedLawInfoItem extends LawInfoItemEvent {}

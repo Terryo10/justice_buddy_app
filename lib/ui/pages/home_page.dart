@@ -6,6 +6,7 @@ import '../../blocs/law_info_item_bloc/law_info_item_bloc.dart';
 import '../../constants/app_urls.dart';
 import '../../models/category_model.dart' as cat;
 import '../../models/law_info_item_model.dart';
+import '../../routes/app_router.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -45,9 +46,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
     _searchController = TextEditingController();
 
+    // Clear any selected law info item when returning to home
+    context.read<LawInfoItemBloc>().add(ClearSelectedLawInfoItem());
+
     // Load data
     context.read<CategoryBloc>().add(LoadCategories());
-    context.read<LawInfoItemBloc>().add(const LoadLawInfoItems());
+
+    // Only load law info items if they're not already loaded
+    final lawInfoItemBloc = context.read<LawInfoItemBloc>();
+    if (lawInfoItemBloc.state is! LawInfoItemLoaded ||
+        (lawInfoItemBloc.state as LawInfoItemLoaded).lawInfoItems.isEmpty) {
+      lawInfoItemBloc.add(const LoadLawInfoItems());
+    }
 
     _fadeController.forward();
     _slideController.forward();
@@ -565,13 +575,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(compact ? 16 : 24),
           onTap: () {
             // Navigate to detail page
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Opening ${item.name}'),
-                backgroundColor: theme.colorScheme.primary,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
+            context.router.push(LawInfoItemDetailRoute(slug: item.slug));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
