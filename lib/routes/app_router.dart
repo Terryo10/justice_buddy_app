@@ -8,6 +8,8 @@ import '../ui/lawyer_directory/lawyer_detail_page.dart';
 import '../ui/letter_generator/letter_templates_page.dart';
 import '../ui/letter_generator/letter_form_page.dart';
 import '../ui/letter_generator/letter_result_page.dart';
+import '../ui/letter_generator/letter_history_page.dart';
+import '../ui/letter_generator/letter_enhancement_page.dart';
 import '../ui/chat/chat_page.dart';
 
 part 'app_router.gr.dart';
@@ -36,5 +38,10 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: LetterTemplatesRoute.page, path: '/letter-templates'),
     AutoRoute(page: LetterFormRoute.page, path: '/letter-form/:templateId'),
     AutoRoute(page: LetterResultRoute.page, path: '/letter-result/:requestId'),
+    AutoRoute(page: LetterHistoryRoute.page, path: '/letter-history'),
+    AutoRoute(
+      page: LetterEnhancementRoute.page,
+      path: '/letter-enhance/:requestId',
+    ),
   ];
 }

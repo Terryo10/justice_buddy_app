@@ -43,6 +43,8 @@ class AppUrls {
       '$letterRequests/status/$requestId';
   static String downloadLetter(String requestId) =>
       '$letterRequests/download/$requestId';
+  static String updateLetter(String requestId) =>
+      '$letterRequests/update/$requestId';
   static const String letterHistory = '$letterRequests/history';
   static const String letterHistoryByDevice = '$letterRequests/history/device';
 

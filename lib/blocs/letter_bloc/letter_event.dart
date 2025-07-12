@@ -125,3 +125,29 @@ class ResetLetterState extends LetterEvent {
 class ClearLetterError extends LetterEvent {
   const ClearLetterError();
 }
+
+// Update Letter Event
+class UpdateLetter extends LetterEvent {
+  final String requestId;
+  final String generatedLetter;
+  final String? clientName;
+  final String? clientEmail;
+  final String? clientPhone;
+
+  const UpdateLetter({
+    required this.requestId,
+    required this.generatedLetter,
+    this.clientName,
+    this.clientEmail,
+    this.clientPhone,
+  });
+
+  @override
+  List<Object?> get props => [
+    requestId,
+    generatedLetter,
+    clientName,
+    clientEmail,
+    clientPhone,
+  ];
+}

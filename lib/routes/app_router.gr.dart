@@ -58,6 +58,19 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const LawyersPage(),
       );
     },
+    LetterEnhancementRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<LetterEnhancementRouteArgs>(
+          orElse: () => LetterEnhancementRouteArgs(
+              requestId: pathParams.getString('requestId')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LetterEnhancementPage(
+          key: args.key,
+          requestId: args.requestId,
+        ),
+      );
+    },
     LetterFormRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<LetterFormRouteArgs>(
@@ -69,6 +82,12 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           templateId: args.templateId,
         ),
+      );
+    },
+    LetterHistoryRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const LetterHistoryPage(),
       );
     },
     LetterResultRoute.name: (routeData) {
@@ -203,6 +222,45 @@ class LawyersRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [LetterEnhancementPage]
+class LetterEnhancementRoute extends PageRouteInfo<LetterEnhancementRouteArgs> {
+  LetterEnhancementRoute({
+    Key? key,
+    required String requestId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LetterEnhancementRoute.name,
+          args: LetterEnhancementRouteArgs(
+            key: key,
+            requestId: requestId,
+          ),
+          rawPathParams: {'requestId': requestId},
+          initialChildren: children,
+        );
+
+  static const String name = 'LetterEnhancementRoute';
+
+  static const PageInfo<LetterEnhancementRouteArgs> page =
+      PageInfo<LetterEnhancementRouteArgs>(name);
+}
+
+class LetterEnhancementRouteArgs {
+  const LetterEnhancementRouteArgs({
+    this.key,
+    required this.requestId,
+  });
+
+  final Key? key;
+
+  final String requestId;
+
+  @override
+  String toString() {
+    return 'LetterEnhancementRouteArgs{key: $key, requestId: $requestId}';
+  }
+}
+
+/// generated route for
 /// [LetterFormPage]
 class LetterFormRoute extends PageRouteInfo<LetterFormRouteArgs> {
   LetterFormRoute({
@@ -239,6 +297,20 @@ class LetterFormRouteArgs {
   String toString() {
     return 'LetterFormRouteArgs{key: $key, templateId: $templateId}';
   }
+}
+
+/// generated route for
+/// [LetterHistoryPage]
+class LetterHistoryRoute extends PageRouteInfo<void> {
+  const LetterHistoryRoute({List<PageRouteInfo>? children})
+      : super(
+          LetterHistoryRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LetterHistoryRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

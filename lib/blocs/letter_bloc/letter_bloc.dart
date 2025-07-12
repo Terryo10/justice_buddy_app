@@ -22,6 +22,7 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     on<ClearClientMatters>(_onClearClientMatters);
     on<ValidateForm>(_onValidateForm);
     on<LoadLetterHistory>(_onLoadLetterHistory);
+    on<UpdateLetter>(_onUpdateLetter);
     on<ResetLetterState>(_onResetLetterState);
     on<ClearLetterError>(_onClearLetterError);
   }
@@ -263,6 +264,27 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
 
   void _onResetLetterState(ResetLetterState event, Emitter<LetterState> emit) {
     emit(LetterInitial());
+  }
+
+  Future<void> _onUpdateLetter(
+    UpdateLetter event,
+    Emitter<LetterState> emit,
+  ) async {
+    try {
+      emit(LetterLoading());
+      
+      final updatedRequest = await letterRepository.updateLetter(
+        requestId: event.requestId,
+        generatedLetter: event.generatedLetter,
+        clientName: event.clientName,
+        clientEmail: event.clientEmail,
+        clientPhone: event.clientPhone,
+      );
+
+      emit(LetterUpdated(request: updatedRequest));
+    } catch (error) {
+      emit(LetterError(message: error.toString()));
+    }
   }
 
   void _onClearLetterError(ClearLetterError event, Emitter<LetterState> emit) {

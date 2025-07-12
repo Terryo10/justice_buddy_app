@@ -71,6 +71,16 @@ class SideBar extends StatelessWidget {
                         ),
                         _buildNavItem(
                           context: context,
+                          icon: Icons.history_rounded,
+                          title: 'Letter History',
+                          onTap:
+                              () => _navigateToPage(
+                                context,
+                                const LetterHistoryRoute(),
+                              ),
+                        ),
+                        _buildNavItem(
+                          context: context,
                           icon: Icons.people_outline,
                           title: 'Find Lawyers',
                           onTap:

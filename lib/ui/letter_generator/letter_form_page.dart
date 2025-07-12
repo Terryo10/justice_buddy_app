@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
@@ -63,7 +64,7 @@ class _LetterFormPageState extends State<LetterFormPage> {
               '/letter-result/${state.request.requestId}',
             );
           } else if (state is LetterGenerating) {
-            // Show generating dialog
+            // Show generating dialog with status polling
             _showGeneratingDialog(state.request.requestId!);
           } else if (state is LetterError) {
             // Show error snackbar
@@ -100,11 +101,30 @@ class _LetterFormPageState extends State<LetterFormPage> {
       floatingActionButton: BlocBuilder<LetterBloc, LetterState>(
         builder: (context, state) {
           final isFormValid = _isFormValid(state);
+          final isGenerating = state is LetterGenerating;
+          final isLoading = state is LetterLoading;
+
           return FloatingActionButton.extended(
-            onPressed: isFormValid ? _generateLetter : null,
-            backgroundColor: isFormValid ? null : Colors.grey,
-            icon: const Icon(Icons.send),
-            label: const Text('Generate Letter'),
+            onPressed:
+                (isFormValid && !isGenerating && !isLoading)
+                    ? _generateLetter
+                    : null,
+            backgroundColor:
+                (isFormValid && !isGenerating && !isLoading)
+                    ? null
+                    : Colors.grey,
+            icon:
+                isGenerating || isLoading
+                    ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                    : const Icon(Icons.send),
+            label: Text(isGenerating ? 'Generating...' : 'Generate Letter'),
           );
         },
       ),
@@ -286,12 +306,12 @@ class _LetterFormPageState extends State<LetterFormPage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-                         ...template.optionalFields.map((field) {
-               return Padding(
-                 padding: const EdgeInsets.only(bottom: 16.0),
-                 child: _buildFormField(field, false),
-               );
-             }),
+            ...template.optionalFields.map((field) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: _buildFormField(field, false),
+              );
+            }),
           ],
         ),
       ),
@@ -401,23 +421,75 @@ class _LetterFormPageState extends State<LetterFormPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder:
-          (context) => AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 16),
-                const Text('Generating your letter...'),
-                const SizedBox(height: 8),
-                Text(
-                  'Request ID: $requestId',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+      builder: (dialogContext) => BlocProvider.value(
+        value: context.read<LetterBloc>(),
+        child: BlocListener<LetterBloc, LetterState>(
+          listener: (context, state) {
+            if (state is LetterGenerated) {
+              // Close dialog and navigate to result
+              Navigator.of(dialogContext).pop();
+              context.router.pushNamed(
+                '/letter-result/${state.request.requestId}',
+              );
+            } else if (state is LetterError) {
+              // Close dialog and show error
+              Navigator.of(dialogContext).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
                 ),
-              ],
-            ),
+              );
+            }
+          },
+          child: BlocBuilder<LetterBloc, LetterState>(
+            builder: (context, state) {
+              return AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 16),
+                    const Text('Generating your letter...'),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Request ID: $requestId',
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Please wait while we generate your letter. This may take a few moments.',
+                      style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
+        ),
+      ),
     );
+    
+    // Start polling for status updates
+    _startStatusPolling(requestId);
+  }
+
+  void _startStatusPolling(String requestId) {
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      final currentState = context.read<LetterBloc>().state;
+      
+      // Stop polling if letter is completed, failed, or state changed
+      if (currentState is LetterGenerated || 
+          currentState is LetterError || 
+          currentState is! LetterGenerating) {
+        timer.cancel();
+        return;
+      }
+      
+      // Check status
+      context.read<LetterBloc>().add(CheckLetterStatus(requestId));
+    });
   }
 
   String _getFieldDisplayName(String fieldName) {

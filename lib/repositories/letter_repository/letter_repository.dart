@@ -139,4 +139,37 @@ class LetterRepository {
       rethrow;
     }
   }
+
+  /// Update letter content
+  Future<LetterRequestModel> updateLetter({
+    required String requestId,
+    required String generatedLetter,
+    String? clientName,
+    String? clientEmail,
+    String? clientPhone,
+  }) async {
+    try {
+      if (requestId.trim().isEmpty) {
+        throw Exception('Request ID is required');
+      }
+
+      if (generatedLetter.trim().isEmpty) {
+        throw Exception('Letter content is required');
+      }
+
+      // Get the device ID
+      final deviceId = await deviceIdService.getDeviceId();
+
+      return await provider.updateLetter(
+        requestId: requestId,
+        generatedLetter: generatedLetter,
+        clientName: clientName,
+        clientEmail: clientEmail,
+        clientPhone: clientPhone,
+        deviceId: deviceId,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

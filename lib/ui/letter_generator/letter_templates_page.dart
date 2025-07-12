@@ -18,14 +18,43 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
   String? _selectedCategory;
+  bool _templatesLoaded = false;
+  bool _historyLoaded = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _loadData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Reload data when returning to this page if needed
+    _ensureDataLoaded();
+  }
+
+  void _loadData() {
     context.read<LetterBloc>().add(const LoadTemplates());
-    // Load letter history when the page initializes
     context.read<LetterBloc>().add(const LoadLetterHistory());
+  }
+
+  void _ensureDataLoaded() {
+    final currentState = context.read<LetterBloc>().state;
+
+    // If the current state doesn't contain templates or history data, reload
+    if (currentState is! TemplatesLoaded && currentState is! HistoryLoaded) {
+      _loadData();
+    }
+  }
+
+  void _refreshData() {
+    setState(() {
+      _templatesLoaded = false;
+      _historyLoaded = false;
+    });
+    _loadData();
   }
 
   @override
@@ -41,6 +70,15 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
       appBar: AppBar(
         title: const Text('Letter Generator'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              _refreshData();
+            },
+            tooltip: 'Refresh',
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -61,7 +99,14 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
       children: [
         _buildSearchAndFilter(),
         Expanded(
-          child: BlocBuilder<LetterBloc, LetterState>(
+          child: BlocConsumer<LetterBloc, LetterState>(
+            listener: (context, state) {
+              if (state is TemplatesLoaded) {
+                setState(() {
+                  _templatesLoaded = true;
+                });
+              }
+            },
             builder: (context, state) {
               if (state is LetterLoading) {
                 return const Center(child: CircularProgressIndicator());
@@ -75,6 +120,18 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
                 return _buildTemplatesList(state);
               }
 
+              // If we don't have templates loaded and we're not in a loading state,
+              // show loading and trigger reload
+              if (!_templatesLoaded) {
+                // Trigger reload if not already loading
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (state is! LetterLoading) {
+                    context.read<LetterBloc>().add(const LoadTemplates());
+                  }
+                });
+                return const Center(child: CircularProgressIndicator());
+              }
+
               return const Center(child: Text('No templates available'));
             },
           ),
@@ -84,21 +141,55 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
   }
 
   Widget _buildMyLettersTab() {
-    return BlocBuilder<LetterBloc, LetterState>(
+    return BlocConsumer<LetterBloc, LetterState>(
+      listener: (context, state) {
+        if (state is HistoryLoaded) {
+          setState(() {
+            _historyLoaded = true;
+          });
+        }
+      },
       builder: (context, state) {
-        if (state is LetterLoading) {
+        if (state is LetterLoading && !_historyLoaded) {
           return const Center(child: CircularProgressIndicator());
         }
 
         if (state is LetterError) {
-          return _buildLetterHistoryError(state.message);
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<LetterBloc>().add(const LoadLetterHistory());
+            },
+            child: _buildLetterHistoryError(state.message),
+          );
         }
 
         if (state is HistoryLoaded) {
-          return _buildLetterHistoryList(state.history);
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<LetterBloc>().add(const LoadLetterHistory());
+            },
+            child: _buildLetterHistoryList(state.history),
+          );
         }
 
-        return _buildEmptyLetterHistory();
+        // If we don't have history loaded and we're not in a loading state,
+        // show loading and trigger reload
+        if (!_historyLoaded) {
+          // Trigger reload if not already loading
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (state is! LetterLoading) {
+              context.read<LetterBloc>().add(const LoadLetterHistory());
+            }
+          });
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<LetterBloc>().add(const LoadLetterHistory());
+          },
+          child: _buildEmptyLetterHistory(),
+        );
       },
     );
   }
@@ -346,59 +437,73 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
   }
 
   Widget _buildEmptyLetterHistory() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.history, size: 64, color: Colors.grey),
-          const SizedBox(height: 16),
-          const Text(
-            'No generated letters yet',
-            style: TextStyle(fontSize: 18, color: Colors.grey),
+    return ListView(
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.history, size: 64, color: Colors.grey),
+                const SizedBox(height: 16),
+                const Text(
+                  'No generated letters yet',
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Letters you generate will appear here',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    _tabController.animateTo(0); // Switch to Templates tab
+                  },
+                  child: const Text('Browse Templates'),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Letters you generate will appear here',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              _tabController.animateTo(0); // Switch to Templates tab
-            },
-            child: const Text('Browse Templates'),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildLetterHistoryError(String message) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error_outline, size: 64, color: Colors.red),
-          const SizedBox(height: 16),
-          Text(
-            'Error loading letter history',
-            style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+    return ListView(
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  'Error loading letter history',
+                  style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  message,
+                  style: const TextStyle(color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<LetterBloc>().add(const LoadLetterHistory());
+                  },
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            message,
-            style: const TextStyle(color: Colors.grey),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              context.read<LetterBloc>().add(const LoadLetterHistory());
-            },
-            child: const Text('Retry'),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

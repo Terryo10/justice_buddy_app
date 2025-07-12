@@ -207,4 +207,57 @@ class LetterProvider {
   String getDownloadUrl(String requestId) {
     return AppUrls.downloadLetter(requestId);
   }
+
+  /// Update letter content
+  Future<LetterRequestModel> updateLetter({
+    required String requestId,
+    required String generatedLetter,
+    String? clientName,
+    String? clientEmail,
+    String? clientPhone,
+    required String deviceId,
+  }) async {
+    try {
+      final body = {
+        'generated_letter': generatedLetter,
+        'device_id': deviceId,
+      };
+
+      if (clientName != null) {
+        body['client_name'] = clientName;
+      }
+      if (clientEmail != null) {
+        body['client_email'] = clientEmail;
+      }
+      if (clientPhone != null) {
+        body['client_phone'] = clientPhone;
+      }
+
+      final response = await http.put(
+        Uri.parse(AppUrls.updateLetter(requestId)),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseMap = json.decode(response.body);
+        final Map<String, dynamic> letterRequestData = responseMap['data'];
+        return LetterRequestModel.fromJson(letterRequestData);
+      } else if (response.statusCode == 422) {
+        // Validation errors
+        final Map<String, dynamic> responseMap = json.decode(response.body);
+        final errors = responseMap['errors'] ?? responseMap['message'];
+        throw Exception('Validation failed: $errors');
+      } else if (response.statusCode == 404) {
+        throw Exception('Letter not found or you do not have permission to update it');
+      } else {
+        throw Exception('Failed to update letter: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error updating letter: $e');
+    }
+  }
 }

@@ -151,6 +151,15 @@ class LetterStatusUpdated extends LetterState {
   List<Object?> get props => [request];
 }
 
+class LetterUpdated extends LetterState {
+  final LetterRequestModel request;
+
+  const LetterUpdated({required this.request});
+
+  @override
+  List<Object?> get props => [request];
+}
+
 // History States
 class HistoryLoaded extends LetterState {
   final List<LetterRequestModel> history;
