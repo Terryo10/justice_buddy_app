@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Disallow specific paths that shouldn't be indexed
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /*.js$
+Disallow: /*.css$
+
+# Sitemap location
+Sitemap: https://justicebuddy.co.za/sitemap.xml
+
+# Crawl-delay (optional - helps prevent overwhelming the server)
+Crawl-delay: 1 

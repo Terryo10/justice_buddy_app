@@ -37,15 +37,6 @@ class _GetDocumentsPageState extends State<GetDocumentsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // INSERT_YOUR_CODE
-    Future.delayed(const Duration(seconds: 2), () {
-      // Add your code to execute after 3 seconds here
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Add your code to execute after the first frame is rendered here
-        context.read<DocumentBloc>().add(const LoadDocuments());
-        setState(() {});
-      });
-    });
     return Scaffold(
       appBar: AppBar(
         title: const Text('Legal Documents'),
@@ -284,6 +275,121 @@ class _GetDocumentsPageState extends State<GetDocumentsPage> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is DocumentsLoaded) {
                   return _buildDocumentsList(state.documents);
+                } else if (state is DocumentDetailsLoaded) {
+                  // This state is typically used for single document details
+                  // For the documents list page, we'll show the document in a list format
+                  return _buildDocumentsList([state.document]);
+                } else if (state is DocumentCategoriesLoaded) {
+                  // Categories are loaded but no documents yet, show empty state
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.description,
+                          size: 64,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(height: 16),
+                        const Text('No documents found'),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Try adjusting your filters or search terms',
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            context.read<DocumentBloc>().add(
+                              const LoadDocuments(),
+                            );
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Refresh'),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (state is DocumentDownloading) {
+                  return const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 16),
+                        Text('Downloading document...'),
+                      ],
+                    ),
+                  );
+                } else if (state is DocumentDownloaded) {
+                  // Show success message and return to documents list
+                  // This state is handled in the listener, so we can show a success state here
+                  return const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check_circle, size: 64, color: Colors.green),
+                        SizedBox(height: 16),
+                        Text('Document downloaded successfully!'),
+                      ],
+                    ),
+                  );
+                } else if (state is DocumentMultipleStates) {
+                  // Handle the complex state that can contain multiple pieces of data
+                  if (state.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state.errorMessage != null) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.error, size: 64, color: Colors.red),
+                          const SizedBox(height: 16),
+                          Text(state.errorMessage!),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<DocumentBloc>().add(
+                                const LoadDocuments(),
+                              );
+                            },
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state.documents != null &&
+                      state.documents!.isNotEmpty) {
+                    return _buildDocumentsList(state.documents!);
+                  } else {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.description,
+                            size: 64,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text('No documents found'),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Try adjusting your filters or search terms',
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              context.read<DocumentBloc>().add(
+                                const LoadDocuments(),
+                              );
+                            },
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Refresh'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 } else if (state is DocumentError) {
                   return Center(
                     child: Column(
@@ -304,8 +410,46 @@ class _GetDocumentsPageState extends State<GetDocumentsPage> {
                       ],
                     ),
                   );
+                } else if (state is DocumentInitial) {
+                  return const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 16),
+                        Text('Loading documents...'),
+                      ],
+                    ),
+                  );
                 }
-                return const Center(child: Text('No documents available'));
+
+                // Fallback for any unhandled states
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.help_outline,
+                        size: 64,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text('No documents available'),
+                      const SizedBox(height: 8),
+                      const Text('Please try refreshing the page'),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          context.read<DocumentBloc>().add(
+                            const LoadDocuments(),
+                          );
+                        },
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Refresh'),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ),
@@ -316,15 +460,23 @@ class _GetDocumentsPageState extends State<GetDocumentsPage> {
 
   Widget _buildDocumentsList(List<DocumentModel> documents) {
     if (documents.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.description, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('No documents found'),
-            SizedBox(height: 8),
-            Text('Try adjusting your filters or search terms'),
+            const Icon(Icons.description, size: 64, color: Colors.grey),
+            const SizedBox(height: 16),
+            const Text('No documents found'),
+            const SizedBox(height: 8),
+            const Text('Try adjusting your filters or search terms'),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                context.read<DocumentBloc>().add(const LoadDocuments());
+              },
+              icon: const Icon(Icons.refresh),
+              label: const Text('Refresh'),
+            ),
           ],
         ),
       );

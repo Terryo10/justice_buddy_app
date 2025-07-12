@@ -2,7 +2,7 @@ class AppUrls {
   // Base URL - Use your computer's IP address for mobile development
   // Replace '192.168.1.100' with your actual computer's IP address
   // You can find your IP by running 'ipconfig' on Windows or 'ifconfig' on Mac/Linux
-  static const String baseUrl = 'http://127.0.0.1:8000';
+  static const String baseUrl = 'https://app.justicebuddy.co.za';
   static const String apiPath = '/api';
 
   // Image URL function

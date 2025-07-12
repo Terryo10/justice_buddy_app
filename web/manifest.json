@@ -1,13 +1,21 @@
 {
-    "name": "justice_buddy",
-    "short_name": "justice_buddy",
+    "name": "Justice Buddy - Legal Assistance Platform",
+    "short_name": "Justice Buddy",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#667eea",
+    "theme_color": "#667eea",
+    "description": "Your comprehensive legal assistance platform with AI-powered guidance, lawyer directory, and document generation. Get legal help when you need it most.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "scope": "/",
+    "lang": "en",
+    "dir": "ltr",
+    "categories": [
+        "legal",
+        "productivity",
+        "business"
+    ],
     "icons": [
         {
             "src": "icons/Icon-192.png",
@@ -30,6 +38,44 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "AI Legal Chat",
+            "short_name": "AI Chat",
+            "description": "Chat with AI for legal guidance",
+            "url": "/chat",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Lawyer Directory",
+            "short_name": "Lawyers",
+            "description": "Find qualified lawyers in your area",
+            "url": "/lawyers",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Document Generator",
+            "short_name": "Documents",
+            "description": "Generate legal documents",
+            "url": "/documents",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
         }
     ]
 }

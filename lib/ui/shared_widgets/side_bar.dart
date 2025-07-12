@@ -93,37 +93,6 @@ class SideBar extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 20),
-
-                    _buildSection(
-                      context,
-                      title: 'Settings',
-                      children: [
-                        _buildNavItem(
-                          context: context,
-                          icon: Icons.settings_outlined,
-                          title: 'Settings',
-                          onTap: () {
-                            _showComingSoonSnackBar(context, 'Settings');
-                          },
-                        ),
-                        _buildNavItem(
-                          context: context,
-                          icon: Icons.help_outline_rounded,
-                          title: 'Help & Support',
-                          onTap: () {
-                            _showComingSoonSnackBar(context, 'Help & Support');
-                          },
-                        ),
-                        _buildNavItem(
-                          context: context,
-                          icon: Icons.info_outline_rounded,
-                          title: 'About',
-                          onTap: () {
-                            _showComingSoonSnackBar(context, 'About');
-                          },
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
