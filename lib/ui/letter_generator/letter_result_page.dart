@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import '../../blocs/letter_bloc/letter_bloc.dart';
 import '../../models/letter_request_model.dart';
+// Web-specific imports
+import 'dart:html' as html show Blob, Url, AnchorElement;
 
 @RoutePage()
 class LetterResultPage extends StatefulWidget {
@@ -36,11 +39,12 @@ class _LetterResultPageState extends State<LetterResultPage> {
         actions: [
           BlocBuilder<LetterBloc, LetterState>(
             builder: (context, state) {
-              if (state is LetterGenerated &&
-                  state.request.generatedLetter != null) {
+              if (state is LetterDataState &&
+                  state.currentLetter != null &&
+                  state.currentLetter!.isCompleted &&
+                  state.currentLetter!.generatedLetter != null) {
                 return IconButton(
-                  onPressed:
-                      () => _copyToClipboard(state.request.generatedLetter!),
+                  onPressed: () => _copyToClipboard(state.currentLetter!.generatedLetter!),
                   icon: const Icon(Icons.copy),
                   tooltip: 'Copy to clipboard',
                 );
@@ -71,16 +75,12 @@ class _LetterResultPageState extends State<LetterResultPage> {
               return _buildErrorWidget(state.message);
             }
 
-            if (state is LetterGenerated) {
-              return _buildLetterContent(state.request);
-            }
-
-            if (state is LetterGenerating || state is LetterStatusUpdated) {
-              final request =
-                  state is LetterGenerating
-                      ? state.request
-                      : (state as LetterStatusUpdated).request;
-              return _buildGeneratingContent(request);
+            if (state is LetterDataState && state.currentLetter != null) {
+              if (state.currentLetter!.isCompleted) {
+                return _buildLetterContent(state.currentLetter!);
+              } else if (state.isGenerating || state.currentLetter!.isProcessing) {
+                return _buildGeneratingContent(state.currentLetter!);
+              }
             }
 
             return const Center(child: Text('Loading letter details...'));
@@ -214,7 +214,7 @@ class _LetterResultPageState extends State<LetterResultPage> {
             ],
             if (request.letterTemplate != null) ...[
               _buildDetailRow('Template', request.letterTemplate!.name),
-              _buildDetailRow('Category', request.letterTemplate!.category),
+              _buildDetailRow('Category', request.letterTemplate!.category ?? 'N/A'),
             ],
             if (request.generatedAt != null) ...[
               _buildDetailRow(
@@ -294,6 +294,40 @@ class _LetterResultPageState extends State<LetterResultPage> {
             ),
             const SizedBox(height: 8),
           ],
+          // PDF Download Button (placeholder, will be enabled when PDF is available)
+          if (request.documentPath != null &&
+              request.documentPath!.endsWith('.pdf')) ...[
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _downloadDocument(request),
+                icon: const Icon(Icons.picture_as_pdf),
+                label: const Text('Download as PDF'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+          // Enhance/Edit Letter Button
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed:
+                  request.requestId != null
+                      ? () {
+                        context.router.pushNamed(
+                          '/letter-enhance/${request.requestId}',
+                        );
+                      }
+                      : null,
+              icon: const Icon(Icons.edit),
+              label: const Text('Enhance / Edit Letter'),
+            ),
+          ),
+          const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
@@ -356,18 +390,42 @@ class _LetterResultPageState extends State<LetterResultPage> {
     );
   }
 
-    void _downloadDocument(LetterRequestModel request) async {
+  void _downloadDocument(LetterRequestModel request) async {
     if (request.requestId == null) return;
-    
+
     try {
-      final repository = context.read<LetterBloc>().letterRepository;
-      final downloadUrl = repository.getDownloadUrl(request.requestId!);
-      
-      final uri = Uri.parse(downloadUrl);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (kIsWeb) {
+        // For web, create a downloadable file
+        final content = request.generatedLetter ?? '';
+        final blob = html.Blob([content], 'text/plain');
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.AnchorElement(href: url)
+          ..download = 'letter_${request.requestId}.txt'
+          ..click();
+        html.Url.revokeObjectUrl(url);
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Letter downloaded!')),
+          );
+        }
       } else {
-        throw Exception('Could not open download URL');
+        // For mobile, show download dialog
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Download Letter'),
+            content: const Text(
+              'Download functionality is not yet implemented for mobile platforms.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {

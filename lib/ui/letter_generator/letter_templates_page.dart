@@ -44,7 +44,8 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
     final currentState = context.read<LetterBloc>().state;
 
     // If the current state doesn't contain templates or history data, reload
-    if (currentState is! TemplatesLoaded && currentState is! HistoryLoaded) {
+    if (currentState is! LetterDataState ||
+        (!currentState.templatesLoaded && !currentState.historyLoaded)) {
       _loadData();
     }
   }
@@ -101,7 +102,7 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
         Expanded(
           child: BlocConsumer<LetterBloc, LetterState>(
             listener: (context, state) {
-              if (state is TemplatesLoaded) {
+              if (state is LetterDataState && state.templatesLoaded) {
                 setState(() {
                   _templatesLoaded = true;
                 });
@@ -116,7 +117,7 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
                 return _buildErrorWidget(state.message);
               }
 
-              if (state is TemplatesLoaded) {
+              if (state is LetterDataState && state.templatesLoaded) {
                 return _buildTemplatesList(state);
               }
 
@@ -143,7 +144,7 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
   Widget _buildMyLettersTab() {
     return BlocConsumer<LetterBloc, LetterState>(
       listener: (context, state) {
-        if (state is HistoryLoaded) {
+        if (state is LetterDataState && state.historyLoaded) {
           setState(() {
             _historyLoaded = true;
           });
@@ -163,7 +164,7 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
           );
         }
 
-        if (state is HistoryLoaded) {
+        if (state is LetterDataState && state.historyLoaded) {
           return RefreshIndicator(
             onRefresh: () async {
               context.read<LetterBloc>().add(const LoadLetterHistory());
@@ -223,7 +224,7 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
           const SizedBox(height: 16),
           BlocBuilder<LetterBloc, LetterState>(
             builder: (context, state) {
-              if (state is TemplatesLoaded && state.categories != null) {
+              if (state is LetterDataState && state.categories != null) {
                 return _buildCategoryFilter(state.categories!);
               }
               return const SizedBox.shrink();
@@ -282,7 +283,7 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
     );
   }
 
-  Widget _buildTemplatesList(TemplatesLoaded state) {
+  Widget _buildTemplatesList(LetterDataState state) {
     if (state.templates.isEmpty) {
       return const Center(
         child: Column(
@@ -541,7 +542,7 @@ class _LetterTemplatesPageState extends State<LetterTemplatesPage>
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: Text(
-                      _getCategoryDisplayName(template.category),
+                      _getCategoryDisplayName(template.category ?? 'general'),
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 12,

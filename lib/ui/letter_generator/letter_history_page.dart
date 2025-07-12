@@ -48,7 +48,7 @@ class _LetterHistoryPageState extends State<LetterHistoryPage> {
             return _buildErrorWidget(state.message);
           }
 
-          if (state is HistoryLoaded) {
+          if (state is LetterDataState && state.historyLoaded) {
             if (state.history.isEmpty) {
               return _buildEmptyState();
             }

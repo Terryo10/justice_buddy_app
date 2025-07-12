@@ -10,7 +10,8 @@ part 'letter_state.dart';
 class LetterBloc extends Bloc<LetterEvent, LetterState> {
   final LetterRepository letterRepository;
 
-  LetterBloc({required this.letterRepository}) : super(LetterInitial()) {
+  LetterBloc({required this.letterRepository})
+    : super(const LetterDataState()) {
     on<LoadTemplates>(_onLoadTemplates);
     on<LoadTemplate>(_onLoadTemplate);
     on<LoadCategories>(_onLoadCategories);
@@ -31,7 +32,12 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     LoadTemplates event,
     Emitter<LetterState> emit,
   ) async {
-    emit(LetterLoading());
+    emit(
+      LetterLoading(
+        previousState:
+            state is LetterDataState ? state as LetterDataState : null,
+      ),
+    );
     try {
       final templates = await letterRepository.getTemplates(
         category: event.category,
@@ -49,16 +55,27 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
         }
       }
 
+      final currentState =
+          state is LetterDataState
+              ? state as LetterDataState
+              : const LetterDataState();
       emit(
-        TemplatesLoaded(
+        currentState.copyWith(
           templates: templates,
-          categories: categories,
+          categories: categories ?? currentState.categories,
           currentCategory: event.category,
           searchQuery: event.search,
+          templatesLoaded: true,
         ),
       );
     } catch (error) {
-      emit(LetterError(message: error.toString()));
+      emit(
+        LetterError(
+          message: error.toString(),
+          previousState:
+              state is LetterDataState ? state as LetterDataState : null,
+        ),
+      );
     }
   }
 
@@ -66,12 +83,27 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     LoadTemplate event,
     Emitter<LetterState> emit,
   ) async {
-    emit(LetterLoading());
+    emit(
+      LetterLoading(
+        previousState:
+            state is LetterDataState ? state as LetterDataState : null,
+      ),
+    );
     try {
       final template = await letterRepository.getTemplate(event.templateId);
-      emit(TemplateDetailsLoaded(template: template));
+      final currentState =
+          state is LetterDataState
+              ? state as LetterDataState
+              : const LetterDataState();
+      emit(currentState.copyWith(selectedTemplate: template));
     } catch (error) {
-      emit(LetterError(message: error.toString()));
+      emit(
+        LetterError(
+          message: error.toString(),
+          previousState:
+              state is LetterDataState ? state as LetterDataState : null,
+        ),
+      );
     }
   }
 
@@ -79,41 +111,58 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     LoadCategories event,
     Emitter<LetterState> emit,
   ) async {
-    emit(LetterLoading());
+    emit(
+      LetterLoading(
+        previousState:
+            state is LetterDataState ? state as LetterDataState : null,
+      ),
+    );
     try {
       final categories = await letterRepository.getCategories();
-      emit(CategoriesLoaded(categories: categories));
+      final currentState =
+          state is LetterDataState
+              ? state as LetterDataState
+              : const LetterDataState();
+      emit(currentState.copyWith(categories: categories));
     } catch (error) {
-      emit(LetterError(message: error.toString()));
+      emit(
+        LetterError(
+          message: error.toString(),
+          previousState:
+              state is LetterDataState ? state as LetterDataState : null,
+        ),
+      );
     }
   }
 
   void _onSelectTemplate(SelectTemplate event, Emitter<LetterState> emit) {
-    if (state is TemplatesLoaded) {
-      final currentState = state as TemplatesLoaded;
-      emit(currentState.copyWith(selectedTemplate: event.template));
-    } else {
-      // Create a new form state for the selected template
-      emit(
-        LetterFormState(
-          template: event.template,
-          clientMatters: {},
-          clientName: '',
-          validationErrors: [],
-          isValid: false,
-        ),
-      );
-    }
+    final currentState =
+        state is LetterDataState
+            ? state as LetterDataState
+            : const LetterDataState();
+    emit(
+      currentState.copyWith(
+        selectedTemplate: event.template,
+        // Reset form data when selecting a new template
+        clearClientData: true,
+        validationErrors:
+            event.template.requiredFields
+                .map((field) => "Required field '$field' is missing or empty")
+                .toList(),
+        isFormValid: false,
+      ),
+    );
   }
 
   void _onClearTemplateSelection(
     ClearTemplateSelection event,
     Emitter<LetterState> emit,
   ) {
-    if (state is TemplatesLoaded) {
-      final currentState = state as TemplatesLoaded;
-      emit(currentState.copyWith(selectedTemplate: null));
-    }
+    final currentState =
+        state is LetterDataState
+            ? state as LetterDataState
+            : const LetterDataState();
+    emit(currentState.copyWith(clearSelectedTemplate: true));
   }
 
   Future<void> _onGenerateLetter(
@@ -121,6 +170,12 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     Emitter<LetterState> emit,
   ) async {
     try {
+      final currentState =
+          state is LetterDataState
+              ? state as LetterDataState
+              : const LetterDataState();
+      emit(currentState.copyWith(isGenerating: true));
+
       final request = await letterRepository.generateLetter(
         templateId: event.templateId,
         clientName: event.clientName,
@@ -130,13 +185,24 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
         generateAsync: event.generateAsync,
       );
 
-      if (request.isCompleted) {
-        emit(LetterGenerated(request: request));
-      } else {
-        emit(LetterGenerating(request: request));
-      }
+      emit(
+        currentState.copyWith(
+          currentLetter: request,
+          isGenerating: false,
+          clientName: event.clientName,
+          clientEmail: event.clientEmail,
+          clientPhone: event.clientPhone,
+          clientMatters: event.clientMatters,
+        ),
+      );
     } catch (error) {
-      emit(LetterError(message: error.toString()));
+      emit(
+        LetterError(
+          message: error.toString(),
+          previousState:
+              state is LetterDataState ? state as LetterDataState : null,
+        ),
+      );
     }
   }
 
@@ -144,22 +210,42 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     CheckLetterStatus event,
     Emitter<LetterState> emit,
   ) async {
+    emit(
+      LetterLoading(
+        previousState:
+            state is LetterDataState ? state as LetterDataState : null,
+      ),
+    );
     try {
       final request = await letterRepository.checkLetterStatus(event.requestId);
+      final currentState =
+          state is LetterDataState
+              ? state as LetterDataState
+              : const LetterDataState();
 
-      if (request.isCompleted) {
-        emit(LetterGenerated(request: request));
-      } else if (request.isFailed) {
+      if (request.isFailed) {
         emit(
           LetterError(
             message: request.errorMessage ?? 'Letter generation failed',
+            previousState: currentState,
           ),
         );
       } else {
-        emit(LetterStatusUpdated(request: request));
+        emit(
+          currentState.copyWith(
+            currentLetter: request,
+            isGenerating: !request.isCompleted,
+          ),
+        );
       }
     } catch (error) {
-      emit(LetterError(message: error.toString()));
+      emit(
+        LetterError(
+          message: error.toString(),
+          previousState:
+              state is LetterDataState ? state as LetterDataState : null,
+        ),
+      );
     }
   }
 
@@ -167,8 +253,12 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     UpdateClientMatters event,
     Emitter<LetterState> emit,
   ) {
-    if (state is LetterFormState) {
-      final currentState = state as LetterFormState;
+    final currentState =
+        state is LetterDataState
+            ? state as LetterDataState
+            : const LetterDataState();
+
+    if (currentState.selectedTemplate != null) {
       final updatedMatters = Map<String, dynamic>.from(
         currentState.clientMatters,
       );
@@ -176,7 +266,7 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
 
       // Validate the form with updated matters
       final validationErrors = letterRepository.validateTemplateFields(
-        currentState.template,
+        currentState.selectedTemplate!,
         updatedMatters,
       );
 
@@ -184,7 +274,7 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
         currentState.copyWith(
           clientMatters: updatedMatters,
           validationErrors: validationErrors,
-          isValid: validationErrors.isEmpty,
+          isFormValid: validationErrors.isEmpty,
         ),
       );
     }
@@ -194,19 +284,20 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     ClearClientMatters event,
     Emitter<LetterState> emit,
   ) {
-    if (state is LetterFormState) {
-      final currentState = state as LetterFormState;
+    final currentState =
+        state is LetterDataState
+            ? state as LetterDataState
+            : const LetterDataState();
+
+    if (currentState.selectedTemplate != null) {
       emit(
         currentState.copyWith(
-          clientMatters: {},
-          clientName: '',
-          clientEmail: null,
-          clientPhone: null,
+          clearClientData: true,
           validationErrors:
-              currentState.template.requiredFields
+              currentState.selectedTemplate!.requiredFields
                   .map((field) => "Required field '$field' is missing or empty")
                   .toList(),
-          isValid: false,
+          isFormValid: false,
         ),
       );
     }
@@ -218,52 +309,61 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
       event.clientMatters,
     );
 
-    if (state is LetterFormState) {
-      final currentState = state as LetterFormState;
-      emit(
-        currentState.copyWith(
-          validationErrors: validationErrors,
-          isValid: validationErrors.isEmpty,
-        ),
-      );
-    } else {
-      emit(
-        LetterFormState(
-          template: event.template,
-          clientMatters: event.clientMatters,
-          clientName: '',
-          validationErrors: validationErrors,
-          isValid: validationErrors.isEmpty,
-        ),
-      );
-    }
+    final currentState =
+        state is LetterDataState
+            ? state as LetterDataState
+            : const LetterDataState();
+    emit(
+      currentState.copyWith(
+        selectedTemplate: event.template,
+        clientMatters: event.clientMatters,
+        validationErrors: validationErrors,
+        isFormValid: validationErrors.isEmpty,
+      ),
+    );
   }
 
   Future<void> _onLoadLetterHistory(
     LoadLetterHistory event,
     Emitter<LetterState> emit,
   ) async {
-    emit(LetterLoading());
+    emit(
+      LetterLoading(
+        previousState:
+            state is LetterDataState ? state as LetterDataState : null,
+      ),
+    );
     try {
       final history = await letterRepository.getLetterHistory(
         page: event.page,
         perPage: event.perPage,
       );
 
+      final currentState =
+          state is LetterDataState
+              ? state as LetterDataState
+              : const LetterDataState();
       emit(
-        HistoryLoaded(
+        currentState.copyWith(
           history: history,
           currentPage: event.page,
           hasMore: history.length == event.perPage,
+          historyLoaded: true,
         ),
       );
     } catch (error) {
-      emit(LetterError(message: error.toString()));
+      emit(
+        LetterError(
+          message: error.toString(),
+          previousState:
+              state is LetterDataState ? state as LetterDataState : null,
+        ),
+      );
     }
   }
 
   void _onResetLetterState(ResetLetterState event, Emitter<LetterState> emit) {
-    emit(LetterInitial());
+    emit(const LetterDataState());
   }
 
   Future<void> _onUpdateLetter(
@@ -271,8 +371,12 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
     Emitter<LetterState> emit,
   ) async {
     try {
-      emit(LetterLoading());
-      
+      final currentState =
+          state is LetterDataState
+              ? state as LetterDataState
+              : const LetterDataState();
+      emit(currentState.copyWith(isUpdating: true));
+
       final updatedRequest = await letterRepository.updateLetter(
         requestId: event.requestId,
         generatedLetter: event.generatedLetter,
@@ -281,13 +385,21 @@ class LetterBloc extends Bloc<LetterEvent, LetterState> {
         clientPhone: event.clientPhone,
       );
 
-      emit(LetterUpdated(request: updatedRequest));
+      emit(
+        currentState.copyWith(currentLetter: updatedRequest, isUpdating: false),
+      );
     } catch (error) {
-      emit(LetterError(message: error.toString()));
+      emit(
+        LetterError(
+          message: error.toString(),
+          previousState:
+              state is LetterDataState ? state as LetterDataState : null,
+        ),
+      );
     }
   }
 
   void _onClearLetterError(ClearLetterError event, Emitter<LetterState> emit) {
-    emit(LetterInitial());
+    emit(const LetterDataState());
   }
 }

@@ -5,7 +5,7 @@ class LetterTemplateModel extends Equatable {
   final String name;
   final String slug;
   final String description;
-  final String category;
+  final String? category;
   final List<String> requiredFields;
   final List<String> optionalFields;
   final String? templateContent;
@@ -19,7 +19,7 @@ class LetterTemplateModel extends Equatable {
     required this.name,
     required this.slug,
     required this.description,
-    required this.category,
+    this.category,
     required this.requiredFields,
     required this.optionalFields,
     this.templateContent,
@@ -35,7 +35,7 @@ class LetterTemplateModel extends Equatable {
       name: json['name'] as String,
       slug: json['slug'] as String,
       description: json['description'] as String,
-      category: json['category'] as String,
+      category: json['category'] as String?,
       requiredFields: List<String>.from(json['required_fields'] ?? []),
       optionalFields: List<String>.from(json['optional_fields'] ?? []),
       templateContent: json['template_content'] as String?,

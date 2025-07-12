@@ -1,4 +1,3 @@
-import 'dart:html' as html;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import '../../blocs/letter_bloc/letter_bloc.dart';
 import '../../models/letter_request_model.dart';
-import '../../constants/app_urls.dart';
+// Web-specific imports
+import 'dart:html' as html show Blob, Url, AnchorElement;
 
 @RoutePage()
 class LetterEnhancementPage extends StatefulWidget {
@@ -27,6 +27,7 @@ class _LetterEnhancementPageState extends State<LetterEnhancementPage> {
   LetterRequestModel? _currentLetter;
   bool _isEditing = false;
   bool _hasChanges = false;
+  bool _previousUpdating = false;
 
   @override
   void initState() {
@@ -75,16 +76,20 @@ class _LetterEnhancementPageState extends State<LetterEnhancementPage> {
       ),
       body: BlocListener<LetterBloc, LetterState>(
         listener: (context, state) {
-          if (state is LetterGenerated) {
-            _setCurrentLetter(state.request);
-          } else if (state is LetterUpdated) {
-            _setCurrentLetter(state.request);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Letter saved successfully!'),
-                backgroundColor: Colors.green,
-              ),
-            );
+          if (state is LetterDataState && state.currentLetter != null) {
+            _setCurrentLetter(state.currentLetter!);
+
+            // Show success message if letter was updated
+            if (state.isUpdating == false && _previousUpdating == true) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Letter saved successfully!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+
+            _previousUpdating = state.isUpdating;
           } else if (state is LetterError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
