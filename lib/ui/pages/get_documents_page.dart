@@ -37,6 +37,15 @@ class _GetDocumentsPageState extends State<GetDocumentsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // INSERT_YOUR_CODE
+    Future.delayed(const Duration(seconds: 2), () {
+      // Add your code to execute after 3 seconds here
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Add your code to execute after the first frame is rendered here
+        context.read<DocumentBloc>().add(const LoadDocuments());
+        setState(() {});
+      });
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text('Legal Documents'),
