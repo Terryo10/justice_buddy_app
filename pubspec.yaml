@@ -52,6 +52,9 @@ dependencies:
   # Secure storage
   flutter_secure_storage: ^9.0.0
 
+  # File system access
+  path_provider: ^2.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

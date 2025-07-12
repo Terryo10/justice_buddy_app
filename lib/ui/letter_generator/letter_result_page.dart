@@ -7,6 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import '../../blocs/letter_bloc/letter_bloc.dart';
 import '../../models/letter_request_model.dart';
 // Web-specific imports
+// ignore: deprecated_member_use
 import 'dart:html' as html show Blob, Url, AnchorElement;
 
 @RoutePage()

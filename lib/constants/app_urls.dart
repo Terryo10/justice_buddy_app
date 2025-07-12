@@ -30,6 +30,14 @@ class AppUrls {
       '$lawyers/specialization/$specialization';
   static const String nearbyLawyers = '$lawyers/near';
 
+  // Documents endpoints
+  static const String documents = '$baseUrl$apiPath/documents';
+  static String documentBySlug(String slug) => '$documents/$slug';
+  static const String featuredDocuments = '$documents/featured';
+  static const String popularDocuments = '$documents/popular';
+  static const String documentCategories = '$documents/categories';
+  static String downloadDocument(String slug) => '$documents/$slug/download';
+
   // Letter Generation endpoints
   static const String letterTemplates =
       '$baseUrl$apiPath/letter-generation/templates';
