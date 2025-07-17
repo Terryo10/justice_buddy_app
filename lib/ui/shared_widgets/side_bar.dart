@@ -317,18 +317,4 @@ class SideBar extends StatelessWidget {
       context.router.push(route);
     }
   }
-
-  void _showComingSoonSnackBar(BuildContext context, String feature) {
-    Navigator.of(context).pop(); // Close the drawer first
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$feature coming soon!'),
-        backgroundColor: AppTheme.primaryBlue,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
 }
